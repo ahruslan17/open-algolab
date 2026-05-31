@@ -55,6 +55,7 @@ The first complete MVP module now exists:
 
 - [Sliding Window: Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/)
 - [Trace format v0.1](./docs/trace-format.md)
+- [Localization guide](./docs/localization.md)
 - [Local browser visualizer](./visualizer/)
 
 Run the local static server from the repository root:
@@ -72,6 +73,8 @@ http://localhost:8000/visualizer/
 The visualizer runs fully in the browser. There is no backend, account system, or SaaS dependency.
 
 The MVP visualizer is structured as a small local course interface: a chapter menu, a text explanation, and an interactive trace panel for the selected algorithm.
+
+It currently supports English and Russian via dependency-free locale files.
 
 ## Initial Roadmap
 

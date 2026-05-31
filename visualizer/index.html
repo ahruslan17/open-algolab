@@ -13,102 +13,44 @@
           <span class="brand-mark">O</span>
           <span>
             <strong>OpenAlgoLab</strong>
-            <small>Local visual course</small>
+            <small id="brand-subtitle"></small>
           </span>
         </a>
 
+        <div class="language-switcher" aria-label="Language switcher">
+          <button class="language-button" type="button" data-lang="en">EN</button>
+          <button class="language-button" type="button" data-lang="ru">RU</button>
+        </div>
+
         <nav class="course-nav" aria-label="Algorithms">
-          <p class="nav-label">Core Patterns</p>
-          <button class="nav-item active" type="button">
-            <span>01</span>
-            <strong>Sliding Window</strong>
-            <small>Maximum Sum Subarray of Size K</small>
-          </button>
-          <button class="nav-item locked" type="button" aria-disabled="true">
-            <span>02</span>
-            <strong>Two Pointers</strong>
-            <small>Coming next</small>
-          </button>
-          <button class="nav-item locked" type="button" aria-disabled="true">
-            <span>03</span>
-            <strong>BFS</strong>
-            <small>Coming next</small>
-          </button>
+          <p class="nav-label" id="nav-label"></p>
+          <div id="nav-items"></div>
         </nav>
 
         <div class="sidebar-note">
-          <strong>MVP goal</strong>
-          <p>Read the chapter, then play the trace until every state change is obvious.</p>
+          <strong id="sidebar-note-title"></strong>
+          <p id="sidebar-note-text"></p>
         </div>
       </aside>
 
       <main class="main-content">
         <section class="lesson-hero">
-          <p class="eyebrow">Chapter 01 · Fixed-size Sliding Window</p>
-          <h1 id="title">Maximum Sum Subarray of Size K</h1>
-          <p class="hero-copy">
-            Learn how a fixed-size window moves across an array without recomputing every sum from scratch.
-          </p>
+          <p class="eyebrow" id="lesson-eyebrow"></p>
+          <h1 id="title"></h1>
+          <p class="hero-copy" id="hero-copy"></p>
         </section>
 
         <section class="lesson-layout">
           <article class="lesson-card" aria-label="Algorithm explanation">
-            <div class="section-kicker">Concept</div>
-            <h2>What problem are we solving?</h2>
-            <p>
-              Given an array and a number <code>k</code>, find the largest sum of any contiguous block with exactly
-              <code>k</code> values.
-            </p>
-
-            <div class="example-box">
-              <span>Input</span>
-              <code>nums = [2, 1, 5, 1, 3, 2], k = 3</code>
-              <span>Answer</span>
-              <code>9 from window [5, 1, 3]</code>
-            </div>
-
-            <h2>Why sliding window?</h2>
-            <p>
-              Neighboring windows mostly share the same values. When the window moves one step, only one value leaves
-              and one value enters, so the sum can be updated in constant time.
-            </p>
-
-            <div class="formula-card">
-              <code>new_sum = old_sum - value_that_left + value_that_entered</code>
-            </div>
-
-            <h2>State model</h2>
-            <dl class="state-model">
-              <div>
-                <dt><code>left</code></dt>
-                <dd>Start index of the current window.</dd>
-              </div>
-              <div>
-                <dt><code>right</code></dt>
-                <dd>End index of the current window.</dd>
-              </div>
-              <div>
-                <dt><code>window_sum</code></dt>
-                <dd>Sum of values currently inside the window.</dd>
-              </div>
-              <div>
-                <dt><code>best</code></dt>
-                <dd>Largest complete window sum seen so far.</dd>
-              </div>
-            </dl>
-
-            <h2>Recognition rule</h2>
-            <p>
-              Use fixed-size sliding window when the problem asks for the best, count, or aggregate over every
-              contiguous subarray or substring of exact length <code>k</code>.
-            </p>
+            <div class="section-kicker" id="lesson-kicker"></div>
+            <div id="lesson-sections"></div>
           </article>
 
           <section class="lab-card" aria-label="Interactive trace visualizer">
             <div class="lab-header">
               <div>
-                <p class="eyebrow">Interactive Trace</p>
-                <h2 id="trace-title">Maximum Sum Subarray of Size K</h2>
+                <p class="eyebrow" id="lab-eyebrow"></p>
+                <h2 id="trace-title"></h2>
                 <p id="pattern" class="pattern"></p>
               </div>
               <div class="step-pill" id="step-counter"></div>
@@ -120,11 +62,11 @@
               <div id="array" class="array" aria-label="Array visualization"></div>
               <div class="window-summary">
                 <div>
-                  <span>Current window</span>
+                  <span id="current-window-label"></span>
                   <strong id="window-values"></strong>
                 </div>
                 <div>
-                  <span>Best answer</span>
+                  <span id="best-answer-label"></span>
                   <strong id="best-answer"></strong>
                 </div>
               </div>
@@ -134,29 +76,31 @@
 
             <article class="trace-explanation">
               <div>
-                <p class="label">Action</p>
+                <p class="label" id="action-label"></p>
                 <p id="action"></p>
               </div>
               <div>
-                <p class="label">Decision</p>
+                <p class="label" id="decision-label"></p>
                 <p id="decision"></p>
               </div>
               <div>
-                <p class="label">Why</p>
+                <p class="label" id="why-label"></p>
                 <p id="why"></p>
               </div>
             </article>
 
             <div class="controls" aria-label="Trace controls">
-              <button id="prev" type="button">Previous</button>
-              <button id="next" type="button">Next</button>
-              <button id="reset" type="button">Reset</button>
+              <button id="prev" type="button"></button>
+              <button id="next" type="button"></button>
+              <button id="reset" type="button"></button>
             </div>
           </section>
         </section>
       </main>
     </div>
 
+    <script src="./locales/en.js"></script>
+    <script src="./locales/ru.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

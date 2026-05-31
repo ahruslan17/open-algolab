@@ -1,8 +1,17 @@
 # Intuition
 
-The direct way to solve this problem is to list every subarray of size `k` and sum each one.
+The important word in this problem is **contiguous**.
 
-For `nums = [2, 1, 5, 1, 3, 2]` and `k = 3`, that means:
+We are not choosing any `k` values from the array. We are choosing `k` values that stand next to each other.
+
+For this input:
+
+```text
+nums = [2, 1, 5, 1, 3, 2]
+k = 3
+```
+
+The valid candidates are only:
 
 ```text
 [2, 1, 5] -> 8
@@ -11,40 +20,110 @@ For `nums = [2, 1, 5, 1, 3, 2]` and `k = 3`, that means:
 [1, 3, 2] -> 6
 ```
 
-This works, but it repeats work. Neighboring windows mostly contain the same values.
+## Brute Force
 
-When the window moves from `[2, 1, 5]` to `[1, 5, 1]`:
+The most direct solution is:
 
-- `2` leaves the window;
-- `1` enters the window;
-- `1` and `5` stay.
+1. Take every window of size `k`.
+2. Sum all values inside it.
+3. Keep the largest sum.
 
-So the new sum can be computed from the old sum:
+This is correct, but it repeats work.
+
+When we move from:
 
 ```text
-new_window_sum = old_window_sum - value_that_left + value_that_entered
+[2, 1, 5]
 ```
 
-That is the sliding window idea: update only the boundary changes.
+to:
+
+```text
+   [1, 5, 1]
+```
+
+we do not get a completely new group. The values `1` and `5` are still there.
+
+Only two things changed:
+
+- `2` left the window;
+- the new `1` entered the window.
+
+## The Sliding Window Insight
+
+If the old sum was:
+
+```text
+2 + 1 + 5 = 8
+```
+
+then the next sum is:
+
+```text
+8 - 2 + 1 = 7
+```
+
+We did not add `1 + 5 + 1` from scratch. We reused the previous sum.
+
+That is the whole idea:
+
+```text
+Keep the useful state of the current window.
+When the window moves, update only what changed.
+```
+
+## The Invariant
+
+For this problem, the useful state is `window_sum`.
+
+The invariant is:
+
+```text
+window_sum is always the sum of the current window.
+```
+
+When a value enters on the right:
+
+```text
+window_sum += nums[right]
+```
+
+When a value leaves on the left:
+
+```text
+window_sum -= nums[left]
+```
+
+If this invariant stays true, then every time the window has exactly `k` values, we can safely compare `window_sum` with `best`.
 
 ## State Variables
 
 ### `left`
 
-`left` is the first index in the current window. For a fixed-size window, it moves forward after every valid window is processed.
+The index where the current window starts.
 
 ### `right`
 
-`right` is the index currently being added to the window. It moves from the start of the array to the end.
+The index where the current window ends.
 
 ### `window_sum`
 
-`window_sum` is the sum of the values currently inside the window. It grows when `right` adds a value and shrinks when `left` removes a value.
+The sum of the values currently inside the window.
 
 ### `best`
 
-`best` is the largest sum seen among complete windows of size `k`. It is updated only after the window reaches size `k`.
+The largest valid window sum found so far.
 
-## Why This Avoids Recomputation
+## What To Remember
 
-Every array element is added to `window_sum` once and removed at most once. The algorithm does constant work per index, so the total time is `O(n)` instead of recomputing each window in `O(k)` time.
+Do not memorize this as "Sliding Window is used for maximum sum subarray."
+
+Remember the deeper reason:
+
+```text
+The candidates are contiguous.
+Neighboring candidates overlap.
+So we can move the boundaries and update state instead of starting over.
+```
+
+That is the essence of Sliding Window.

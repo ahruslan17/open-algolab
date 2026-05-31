@@ -1,69 +1,54 @@
-const trace = {
+const traceData = {
   version: "0.1",
   id: "sliding-window-max-sum-subarray-k",
-  title: "Maximum Sum Subarray of Size K",
-  pattern: "Sliding Window",
   visualType: "array-window",
   input: { nums: [2, 1, 5, 1, 3, 2], k: 3 },
   answer: 9,
   steps: [
-    {
-      step: 1,
-      action: "Add nums[0] = 2; keep building the first full window.",
-      state: { left: 0, right: 0, windowStart: 0, windowEnd: 0, window: [2], window_sum: 2, best: null, removed: null, highlights: [0] },
-      decision: "Window size is 1, which is smaller than k = 3.",
-      why: "A partial window cannot answer the problem because the required size is exactly k."
-    },
-    {
-      step: 2,
-      action: "Add nums[1] = 1; keep building the first full window.",
-      state: { left: 0, right: 1, windowStart: 0, windowEnd: 1, window: [2, 1], window_sum: 3, best: null, removed: null, highlights: [1] },
-      decision: "Window size is 2, which is smaller than k = 3.",
-      why: "A partial window cannot answer the problem because the required size is exactly k."
-    },
-    {
-      step: 3,
-      action: "Evaluate window nums[0:3] and prepare to slide.",
-      state: { left: 0, right: 2, windowStart: 0, windowEnd: 2, window: [2, 1, 5], window_sum: 8, best: 8, removed: 2, highlights: [0, 1, 2] },
-      decision: "First complete window has sum 8, so best becomes 8.",
-      why: "Now that the window has exactly k values, it is a valid candidate for the answer."
-    },
-    {
-      step: 4,
-      action: "Evaluate window nums[1:4] and prepare to slide.",
-      state: { left: 1, right: 3, windowStart: 1, windowEnd: 3, window: [1, 5, 1], window_sum: 7, best: 8, removed: 1, highlights: [1, 2, 3] },
-      decision: "Current window sum 7 does not beat best 8.",
-      why: "Now that the window has exactly k values, it is a valid candidate for the answer."
-    },
-    {
-      step: 5,
-      action: "Evaluate window nums[2:5] and prepare to slide.",
-      state: { left: 2, right: 4, windowStart: 2, windowEnd: 4, window: [5, 1, 3], window_sum: 9, best: 9, removed: 5, highlights: [2, 3, 4] },
-      decision: "Current window sum 9 is better than previous best 8.",
-      why: "Now that the window has exactly k values, it is a valid candidate for the answer."
-    },
-    {
-      step: 6,
-      action: "Evaluate window nums[3:6] and prepare to slide.",
-      state: { left: 3, right: 5, windowStart: 3, windowEnd: 5, window: [1, 3, 2], window_sum: 6, best: 9, removed: 1, highlights: [3, 4, 5] },
-      decision: "Current window sum 6 does not beat best 9.",
-      why: "Now that the window has exactly k values, it is a valid candidate for the answer."
-    }
+    { step: 1, state: { left: 0, right: 0, windowStart: 0, windowEnd: 0, window: [2], window_sum: 2, best: null, removed: null, highlights: [0] } },
+    { step: 2, state: { left: 0, right: 1, windowStart: 0, windowEnd: 1, window: [2, 1], window_sum: 3, best: null, removed: null, highlights: [1] } },
+    { step: 3, state: { left: 0, right: 2, windowStart: 0, windowEnd: 2, window: [2, 1, 5], window_sum: 8, best: 8, removed: 2, highlights: [0, 1, 2] } },
+    { step: 4, state: { left: 1, right: 3, windowStart: 1, windowEnd: 3, window: [1, 5, 1], window_sum: 7, best: 8, removed: 1, highlights: [1, 2, 3] } },
+    { step: 5, state: { left: 2, right: 4, windowStart: 2, windowEnd: 4, window: [5, 1, 3], window_sum: 9, best: 9, removed: 5, highlights: [2, 3, 4] } },
+    { step: 6, state: { left: 3, right: 5, windowStart: 3, windowEnd: 5, window: [1, 3, 2], window_sum: 6, best: 9, removed: 1, highlights: [3, 4, 5] } }
   ]
 };
 
+const locales = window.OPENALGOLAB_LOCALES || {};
+const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
+let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
 let currentStepIndex = 0;
 
+if (!locales[currentLanguage]) {
+  currentLanguage = defaultLanguage;
+}
+
 const elements = {
+  brandSubtitle: document.getElementById("brand-subtitle"),
+  languageButtons: [...document.querySelectorAll(".language-button")],
+  navLabel: document.getElementById("nav-label"),
+  navItems: document.getElementById("nav-items"),
+  sidebarNoteTitle: document.getElementById("sidebar-note-title"),
+  sidebarNoteText: document.getElementById("sidebar-note-text"),
+  lessonEyebrow: document.getElementById("lesson-eyebrow"),
   title: document.getElementById("title"),
+  heroCopy: document.getElementById("hero-copy"),
+  lessonKicker: document.getElementById("lesson-kicker"),
+  lessonSections: document.getElementById("lesson-sections"),
+  labEyebrow: document.getElementById("lab-eyebrow"),
   traceTitle: document.getElementById("trace-title"),
   pattern: document.getElementById("pattern"),
   counter: document.getElementById("step-counter"),
   progress: document.getElementById("progress-track"),
   array: document.getElementById("array"),
   state: document.getElementById("state"),
+  currentWindowLabel: document.getElementById("current-window-label"),
+  bestAnswerLabel: document.getElementById("best-answer-label"),
   windowValues: document.getElementById("window-values"),
   bestAnswer: document.getElementById("best-answer"),
+  actionLabel: document.getElementById("action-label"),
+  decisionLabel: document.getElementById("decision-label"),
+  whyLabel: document.getElementById("why-label"),
   action: document.getElementById("action"),
   decision: document.getElementById("decision"),
   why: document.getElementById("why"),
@@ -71,6 +56,10 @@ const elements = {
   next: document.getElementById("next"),
   reset: document.getElementById("reset")
 };
+
+function t() {
+  return locales[currentLanguage];
+}
 
 function formatValue(value) {
   return value === null || value === undefined ? "—" : String(value);
@@ -80,11 +69,123 @@ function formatWindow(windowValues) {
   return `[${windowValues.join(", ")}]`;
 }
 
-function renderProgress() {
-  elements.progress.innerHTML = trace.steps
+function setText(element, value) {
+  element.textContent = value;
+}
+
+function renderNavigation(copy) {
+  setText(elements.brandSubtitle, copy.sidebar.brandSubtitle);
+  setText(elements.navLabel, copy.sidebar.navLabel);
+  setText(elements.sidebarNoteTitle, copy.sidebar.noteTitle);
+  setText(elements.sidebarNoteText, copy.sidebar.noteText);
+
+  elements.navItems.innerHTML = copy.sidebar.items
+    .map((item, index) => {
+      const classes = ["nav-item", index === 0 ? "active" : "", item.locked ? "locked" : ""].filter(Boolean).join(" ");
+      const disabled = item.locked ? 'aria-disabled="true"' : "";
+      return `
+        <button class="${classes}" type="button" ${disabled}>
+          <span>${item.number}</span>
+          <strong>${item.title}</strong>
+          <small>${item.subtitle}</small>
+        </button>
+      `;
+    })
+    .join("");
+
+  elements.languageButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === currentLanguage);
+    button.setAttribute("aria-pressed", String(button.dataset.lang === currentLanguage));
+  });
+}
+
+function renderLessonSections(copy) {
+  const [intro, problem, invariant, stateModel, recognition] = copy.lesson.sections;
+
+  elements.lessonSections.innerHTML = `
+    <section class="lesson-section">
+      <h2>${intro.title}</h2>
+      ${intro.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+    </section>
+
+    <div class="concept-strip" aria-label="Sliding window movement">
+      <div>
+        <span>${copy.lesson.conceptStrip.oldLabel}</span>
+        <code>${copy.lesson.conceptStrip.oldWindow}</code>
+      </div>
+      <div class="arrow">→</div>
+      <div>
+        <span>${copy.lesson.conceptStrip.newLabel}</span>
+        <code>${copy.lesson.conceptStrip.newWindow}</code>
+      </div>
+    </div>
+    <p>${copy.lesson.conceptStrip.explanation}</p>
+
+    <section class="lesson-section">
+      <h2>${problem.title}</h2>
+      ${problem.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+    </section>
+
+    <div class="example-box">
+      <span>${copy.lesson.example.inputLabel}</span>
+      <code>${copy.lesson.example.input}</code>
+      <span>${copy.lesson.example.answerLabel}</span>
+      <code>${copy.lesson.example.answer}</code>
+    </div>
+
+    <section class="lesson-section">
+      <h2>${invariant.title}</h2>
+      <p>${invariant.paragraphs[0]}</p>
+      <div class="formula-card"><code>${copy.lesson.formula}</code></div>
+      <p>${invariant.paragraphs[1]}</p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>${stateModel.title}</h2>
+      <dl class="state-model">
+        ${stateModel.stateModel
+          .map(([name, description]) => `<div><dt><code>${name}</code></dt><dd>${description}</dd></div>`)
+          .join("")}
+      </dl>
+    </section>
+
+    <section class="lesson-section">
+      <h2>${recognition.title}</h2>
+      ${recognition.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+    </section>
+
+    <div class="remember-box">
+      <strong>${copy.lesson.remember.title}</strong>
+      <p>${copy.lesson.remember.text}</p>
+    </div>
+  `;
+}
+
+function renderStaticText(copy) {
+  document.documentElement.lang = copy.meta.htmlLang;
+  setText(elements.lessonEyebrow, copy.lesson.eyebrow);
+  setText(elements.title, copy.lesson.title);
+  setText(elements.heroCopy, copy.lesson.hero);
+  setText(elements.lessonKicker, copy.lesson.kicker);
+  setText(elements.labEyebrow, copy.lab.eyebrow);
+  setText(elements.traceTitle, copy.trace.title);
+  setText(elements.currentWindowLabel, copy.lab.currentWindow);
+  setText(elements.bestAnswerLabel, copy.lab.bestAnswer);
+  setText(elements.actionLabel, copy.lab.labels.action);
+  setText(elements.decisionLabel, copy.lab.labels.decision);
+  setText(elements.whyLabel, copy.lab.labels.why);
+  setText(elements.prev, copy.lab.controls.previous);
+  setText(elements.next, copy.lab.controls.next);
+  setText(elements.reset, copy.lab.controls.reset);
+  renderNavigation(copy);
+  renderLessonSections(copy);
+}
+
+function renderProgress(copy) {
+  elements.progress.innerHTML = traceData.steps
     .map((step, index) => {
       const stateClass = index === currentStepIndex ? "current" : index < currentStepIndex ? "done" : "";
-      return `<button class="progress-dot ${stateClass}" type="button" data-step="${index}" aria-label="Go to step ${step.step}">${step.step}</button>`;
+      return `<button class="progress-dot ${stateClass}" type="button" data-step="${index}" aria-label="${copy.lab.progressAria} ${step.step}">${step.step}</button>`;
     })
     .join("");
 
@@ -96,9 +197,9 @@ function renderProgress() {
   });
 }
 
-function renderArray(step) {
+function renderArray(step, copy) {
   const state = step.state;
-  const nums = trace.input.nums;
+  const nums = traceData.input.nums;
   const highlights = new Set(state.highlights || []);
 
   elements.array.innerHTML = "";
@@ -115,7 +216,7 @@ function renderArray(step) {
       cell.classList.add("highlighted");
     }
 
-    if (state.best === state.window_sum && state.window.length === trace.input.k) {
+    if (state.best === state.window_sum && state.window.length === traceData.input.k) {
       cell.classList.add("candidate-best");
     }
 
@@ -140,7 +241,7 @@ function renderArray(step) {
     number.textContent = value;
 
     const indexLabel = document.createElement("small");
-    indexLabel.textContent = `index ${index}`;
+    indexLabel.textContent = `${copy.lab.indexLabel} ${index}`;
 
     cell.append(pointerRow, number, indexLabel);
     elements.array.appendChild(cell);
@@ -150,14 +251,14 @@ function renderArray(step) {
 function renderState(step) {
   const state = step.state;
   const rows = [
-    ["k", trace.input.k],
+    ["k", traceData.input.k],
     ["left", state.left],
     ["right", state.right],
     ["window", formatWindow(state.window)],
     ["window_sum", state.window_sum],
     ["best", state.best],
     ["removed", state.removed],
-    ["answer", trace.answer]
+    ["answer", traceData.answer]
   ];
 
   elements.state.innerHTML = rows
@@ -166,26 +267,38 @@ function renderState(step) {
 }
 
 function render() {
-  const step = trace.steps[currentStepIndex];
+  const copy = t();
+  const step = traceData.steps[currentStepIndex];
+  const localizedStep = copy.trace.steps[currentStepIndex];
   const state = step.state;
 
-  elements.title.textContent = trace.title;
-  elements.traceTitle.textContent = trace.title;
-  elements.pattern.textContent = `${trace.pattern} · ${trace.visualType}`;
-  elements.counter.textContent = `Step ${step.step} / ${trace.steps.length}`;
-  elements.windowValues.textContent = formatWindow(state.window);
-  elements.bestAnswer.textContent = formatValue(state.best);
-  elements.action.textContent = step.action;
-  elements.decision.textContent = step.decision;
-  elements.why.textContent = step.why;
+  setText(elements.pattern, `${copy.trace.pattern} · ${copy.lab.patternSuffix}`);
+  setText(elements.counter, `${copy.lab.stepLabel} ${step.step} / ${traceData.steps.length}`);
+  setText(elements.windowValues, formatWindow(state.window));
+  setText(elements.bestAnswer, formatValue(state.best));
+  setText(elements.action, localizedStep.action);
+  setText(elements.decision, localizedStep.decision);
+  setText(elements.why, localizedStep.why);
 
-  renderProgress();
-  renderArray(step);
+  renderProgress(copy);
+  renderArray(step, copy);
   renderState(step);
 
   elements.prev.disabled = currentStepIndex === 0;
-  elements.next.disabled = currentStepIndex === trace.steps.length - 1;
+  elements.next.disabled = currentStepIndex === traceData.steps.length - 1;
 }
+
+function setLanguage(language) {
+  if (!locales[language]) return;
+  currentLanguage = language;
+  localStorage.setItem("openalgolab-language", language);
+  renderStaticText(t());
+  render();
+}
+
+elements.languageButtons.forEach((button) => {
+  button.addEventListener("click", () => setLanguage(button.dataset.lang));
+});
 
 elements.prev.addEventListener("click", () => {
   currentStepIndex = Math.max(0, currentStepIndex - 1);
@@ -193,7 +306,7 @@ elements.prev.addEventListener("click", () => {
 });
 
 elements.next.addEventListener("click", () => {
-  currentStepIndex = Math.min(trace.steps.length - 1, currentStepIndex + 1);
+  currentStepIndex = Math.min(traceData.steps.length - 1, currentStepIndex + 1);
   render();
 });
 
@@ -202,4 +315,5 @@ elements.reset.addEventListener("click", () => {
   render();
 });
 
+renderStaticText(t());
 render();
