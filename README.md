@@ -49,6 +49,30 @@ topic/
   problems.md         # Practice problems and variations
 ```
 
+## MVP Quick Start
+
+The first complete MVP module now exists:
+
+- [Sliding Window: Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/)
+- [Trace format v0.1](./docs/trace-format.md)
+- [Local browser visualizer](./visualizer/)
+
+Run the local static server from the repository root:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/visualizer/
+```
+
+The visualizer runs fully in the browser. There is no backend, account system, or SaaS dependency.
+
+The MVP visualizer is structured as a small local course interface: a chapter menu, a text explanation, and an interactive trace panel for the selected algorithm.
+
 ## Initial Roadmap
 
 - Two pointers
@@ -86,6 +110,6 @@ Please keep explanations beginner-friendly and avoid unnecessary abstractions.
 
 ## Status
 
-OpenAlgoLab is at the initial repository setup stage. The first learning modules are not implemented yet.
+OpenAlgoLab has its first complete MVP module: Sliding Window / Maximum Sum Subarray of Size K.
 
-The first milestone is to create one complete high-quality topic that can become the template for the rest of the project.
+The next milestone is to use this module as the template for additional algorithm patterns and renderers.
