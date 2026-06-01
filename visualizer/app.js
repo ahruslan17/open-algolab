@@ -18,6 +18,7 @@ const locales = window.OPENALGOLAB_LOCALES || {};
 const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
 let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
+let currentTheme = localStorage.getItem("openalgolab-theme") || "light";
 let currentStepIndex = 0;
 let isLanguageMenuOpen = false;
 
@@ -32,6 +33,9 @@ if (!locales[currentLanguage]) {
 
 const elements = {
   brandSubtitle: document.getElementById("brand-subtitle"),
+  themeToggle: document.getElementById("theme-toggle"),
+  themeToggleIcon: document.getElementById("theme-toggle-icon"),
+  themeToggleLabel: document.getElementById("theme-toggle-label"),
   languageTrigger: document.getElementById("language-trigger"),
   languageTriggerFlag: document.getElementById("language-trigger-flag"),
   languageTriggerLabel: document.getElementById("language-trigger-label"),
@@ -82,6 +86,20 @@ function formatWindow(windowValues) {
 
 function setText(element, value) {
   element.textContent = value;
+}
+
+function applyTheme() {
+  const isDark = currentTheme === "dark";
+  document.documentElement.dataset.theme = currentTheme;
+  elements.themeToggleIcon.textContent = isDark ? "☀" : "☾";
+  elements.themeToggleLabel.textContent = isDark ? "Switch to light theme" : "Switch to dark theme";
+  elements.themeToggle.setAttribute("aria-label", elements.themeToggleLabel.textContent);
+}
+
+function toggleTheme() {
+  currentTheme = currentTheme === "dark" ? "light" : "dark";
+  localStorage.setItem("openalgolab-theme", currentTheme);
+  applyTheme();
 }
 
 function renderNavigation(copy) {
@@ -417,6 +435,8 @@ elements.languageMenu.addEventListener("click", (event) => {
   event.stopPropagation();
 });
 
+elements.themeToggle.addEventListener("click", toggleTheme);
+
 document.addEventListener("click", closeLanguageMenu);
 
 document.addEventListener("keydown", (event) => {
@@ -441,5 +461,6 @@ elements.reset.addEventListener("click", () => {
   render();
 });
 
+applyTheme();
 renderStaticText(t());
 render();

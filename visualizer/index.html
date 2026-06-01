@@ -9,20 +9,29 @@
   <body>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Course navigation">
-        <a class="brand" href="./" aria-label="OpenAlgoLab home">
-          <span class="brand-mark">O</span>
-          <span>
-            <strong>OpenAlgoLab</strong>
-            <small id="brand-subtitle"></small>
-          </span>
-        </a>
+        <div class="sidebar-top">
+          <a class="brand" href="./" aria-label="OpenAlgoLab home">
+            <span class="brand-mark">O</span>
+            <span>
+              <strong>OpenAlgoLab</strong>
+              <small id="brand-subtitle"></small>
+            </span>
+          </a>
 
-        <div class="language-switcher" aria-label="Language switcher">
-          <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="true" aria-expanded="false">
-            <span id="language-trigger-flag" aria-hidden="true"></span>
-            <span class="sr-only" id="language-trigger-label"></span>
-          </button>
-          <div class="language-menu" id="language-menu" hidden></div>
+          <div class="top-actions">
+            <button class="theme-toggle" id="theme-toggle" type="button">
+              <span id="theme-toggle-icon" aria-hidden="true"></span>
+              <span class="sr-only" id="theme-toggle-label"></span>
+            </button>
+
+            <div class="language-switcher" aria-label="Language switcher">
+              <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+                <span id="language-trigger-flag" aria-hidden="true"></span>
+                <span class="sr-only" id="language-trigger-label"></span>
+              </button>
+              <div class="language-menu" id="language-menu" hidden></div>
+            </div>
+          </div>
         </div>
 
         <nav class="course-nav" aria-label="Algorithms">
