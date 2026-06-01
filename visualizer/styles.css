@@ -377,7 +377,7 @@ code {
 }
 
 .main-content {
-  width: min(1640px, 100%);
+  width: min(1760px, 100%);
   margin-inline: auto;
   padding: clamp(24px, 3vw, 44px);
 }
@@ -415,7 +415,7 @@ h2 {
 
 .lesson-layout {
   display: grid;
-  grid-template-columns: minmax(620px, 1.18fr) minmax(420px, 0.82fr);
+  grid-template-columns: minmax(620px, 1fr) minmax(560px, 0.9fr);
   gap: clamp(18px, 2vw, 28px);
   align-items: start;
 }
@@ -674,6 +674,7 @@ h2 {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr);
   gap: 12px;
+  align-items: center;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -690,6 +691,10 @@ h2 {
 }
 
 .lab-card {
+  position: sticky;
+  top: clamp(18px, 2vw, 28px);
+  max-height: calc(100vh - clamp(36px, 4vw, 56px));
+  overflow: auto;
   padding: clamp(20px, 2.2vw, 28px);
 }
 
@@ -989,6 +994,12 @@ h2 {
 
   .lesson-layout {
     grid-template-columns: 1fr;
+  }
+
+  .lab-card {
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   #lesson-sections {
