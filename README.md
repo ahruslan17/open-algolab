@@ -143,7 +143,10 @@ Please keep explanations beginner-friendly, explicit, and practical. Prefer clea
 
 ## Support
 
-OpenAlgoLab is free and open-source. If it helps you learn algorithms or prepare for interviews, you can support the project when donation links are added.
+OpenAlgoLab is free and open-source. If it helps you learn algorithms or prepare for interviews, you can support its development:
+
+- Boosty: [boosty.to/ahruslan17](https://boosty.to/ahruslan17)
+- TRON (TRC20): `TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF`
 
 Support is optional. The core learning materials will remain free.
 
