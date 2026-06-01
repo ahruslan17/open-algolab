@@ -27,21 +27,24 @@ window.OPENALGOLAB_LOCALES.en = {
         title: "Start with the picture",
         paragraphs: [
           "Imagine the array as a tape of numbers, and imagine placing a small frame over three neighboring values. That frame is the window. In this problem the frame always has width k = 3.",
-          "Your goal is not to choose any three numbers. Your goal is to inspect every group of three numbers that stand next to each other. Because the groups are contiguous, the frame can move one position at a time."
+          "Your goal is not to choose any three numbers. Your goal is to inspect every group of three numbers that stand next to each other. Because the groups are contiguous, the frame can move one position at a time.",
+          "That word, contiguous, is the reason this pattern works. If candidates did not sit next to each other, there would be no simple frame to slide."
         ]
       },
       {
         title: "What problem are we solving here?",
         paragraphs: [
           "Given nums = [2, 1, 5, 1, 3, 2] and k = 3, we need the largest sum among all length-3 contiguous blocks. The possible blocks are [2, 1, 5], [1, 5, 1], [5, 1, 3], and [1, 3, 2].",
-          "A brute-force solution would sum every block from scratch. That is correct, but it ignores the fact that two neighboring blocks mostly contain the same numbers."
+          "A brute-force solution would sum every block from scratch. That is correct, but it ignores the fact that two neighboring blocks mostly contain the same numbers.",
+          "With n numbers and window size k, brute force costs O(n * k). Sliding Window reduces that to O(n) by reusing the previous sum."
         ]
       },
       {
         title: "The key observation",
         paragraphs: [
           "When the window moves from [2, 1, 5] to [1, 5, 1], we do not get a completely new group. The values 1 and 5 stay inside the frame. Only 2 leaves on the left, and a new 1 enters on the right.",
-          "So we do not need to recompute the whole sum. If the old sum was 8, the new sum is 8 - 2 + 1 = 7. This is the whole point of Sliding Window: keep a summary of the current window, then update that summary when the boundaries move."
+          "So we do not need to recompute the whole sum. If the old sum was 8, the new sum is 8 - 2 + 1 = 7. This is the whole point of Sliding Window: keep a summary of the current window, then update that summary when the boundaries move.",
+          "For this problem, the summary is only window_sum. In harder fixed-size window problems, the summary might be a count, a frequency map, or a small queue."
         ]
       },
       {
@@ -50,14 +53,16 @@ window.OPENALGOLAB_LOCALES.en = {
           ["left", "Where the current frame starts."],
           ["right", "Where the current frame ends."],
           ["window_sum", "The sum of the values currently inside the frame."],
-          ["best", "The largest valid window sum found so far."]
+          ["best", "The largest valid window sum found so far."],
+          ["invariant", "window_sum must always match the values currently inside the frame."]
         ]
       },
       {
         title: "The mental rule",
         paragraphs: [
           "Use Sliding Window when candidates are continuous segments and moving from one candidate to the next changes only a small part of the state.",
-          "For fixed-size windows, the movement is simple: add the new right value, evaluate the window, remove the old left value, then slide forward."
+          "For fixed-size windows, the movement is simple: add the new right value, evaluate the window, remove the old left value, then slide forward.",
+          "The safe order is add right, evaluate a full window, remove left, then move left. Evaluating too early or removing too early is the most common bug."
         ]
       }
     ],
@@ -75,9 +80,79 @@ window.OPENALGOLAB_LOCALES.en = {
       answer: "9 from the window [5, 1, 3]"
     },
     formula: "new_sum = old_sum - value_leaving_left + value_entering_right",
+    code: {
+      title: "Reference implementation",
+      intro: "The code follows the same movement as the trace: add right, evaluate a full window, remove left, then move left.",
+      lines: [
+        "def max_sum_subarray_k(nums, k):",
+        "    if k <= 0 or k > len(nums):",
+        "        raise ValueError(\"invalid window size\")",
+        "",
+        "    window_sum = 0",
+        "    best = None",
+        "    left = 0",
+        "",
+        "    for right, value in enumerate(nums):",
+        "        window_sum += value",
+        "",
+        "        if right - left + 1 == k:",
+        "            best = window_sum if best is None else max(best, window_sum)",
+        "            window_sum -= nums[left]",
+        "            left += 1",
+        "",
+        "    return best"
+      ]
+    },
+    whatToNotice: {
+      title: "What to notice in the trace",
+      items: [
+        "Steps 1 and 2 build the first complete window, so they do not update best.",
+        "From step 3 onward, every step evaluates exactly one full size-k window.",
+        "Neighboring windows overlap; only the boundary values change.",
+        "best changes only when the current full window beats the previous best.",
+        "The answer is not the last window sum. It is the best value preserved across all valid windows."
+      ]
+    },
+    edgeCases: {
+      title: "Edge cases",
+      items: [
+        "k == 1: every single value is a valid window.",
+        "k == len(nums): the whole array is the only valid window.",
+        "Negative numbers: best must not start at 0.",
+        "k <= 0 or k > len(nums): no valid fixed-size window exists."
+      ]
+    },
+    mistakes: {
+      title: "Common mistakes",
+      items: [
+        ["Updating best too early", "Only windows with exactly k values are valid candidates."],
+        ["Removing left too soon", "Evaluate the full window before subtracting nums[left]."],
+        ["Initializing best to 0", "This fails when all valid window sums are negative."],
+        ["Returning the last window", "The last checked window is not necessarily the best one."],
+        ["Mixing fixed and variable windows", "This problem does not need a shrink-until-valid while loop."]
+      ]
+    },
+    practice: {
+      title: "Practice next",
+      intro: "Use the same shape with different state.",
+      items: [
+        "Average of Subarrays of Size K",
+        "Maximum Number of Vowels in a Substring of Given Length",
+        "First Negative Number in Every Window of Size K",
+        "Find All Anagrams in a String",
+        "Permutation in String"
+      ],
+      drillsTitle: "Mini drills",
+      drills: [
+        "[5], k = 1 -> 5",
+        "[1, 2, 3], k = 3 -> 6",
+        "[-5, -2, -7], k = 2 -> -7",
+        "[4, 1, 1, 9, 1], k = 2 -> 10"
+      ]
+    },
     remember: {
       title: "The concept in one sentence",
-      text: "When neighboring contiguous candidates overlap, keep the useful state and update only what changed at the boundaries."
+      text: "When neighboring contiguous candidates overlap, keep the useful state, evaluate each valid window exactly once, and update only what changed at the boundaries."
     }
   },
   chapters: {

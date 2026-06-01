@@ -72,6 +72,22 @@ Keep the useful state of the current window.
 When the window moves, update only what changed.
 ```
 
+## Why Contiguous Matters
+
+Sliding Window works here because the next candidate is predictable.
+
+After `[2, 1, 5]`, the next size-3 candidate must be `[1, 5, 1]`. We do not need to search for it. We only move the frame one step to the right.
+
+If the problem allowed choosing any three numbers, then `[2, 5, 3]` or `[1, 3, 2]` could both be candidates for different reasons. There would be no simple "one value leaves, one value enters" movement.
+
+That is the first question to ask:
+
+```text
+Are candidates continuous segments of the input?
+```
+
+If yes, Sliding Window may apply. If no, this pattern is probably the wrong tool.
+
 ## The Invariant
 
 For this problem, the useful state is `window_sum`.
@@ -96,6 +112,20 @@ window_sum -= nums[left]
 
 If this invariant stays true, then every time the window has exactly `k` values, we can safely compare `window_sum` with `best`.
 
+## Update Order
+
+For this fixed-size version, the safest order is:
+
+```text
+1. Add nums[right] to window_sum.
+2. If the window size is less than k, keep building.
+3. If the window size is exactly k, update best.
+4. Remove nums[left] from window_sum.
+5. Move left forward.
+```
+
+The evaluation happens before the removal because the full window is the candidate. Removing first would turn a valid size-`k` window into a smaller partial window.
+
 ## State Variables
 
 ### `left`
@@ -113,6 +143,28 @@ The sum of the values currently inside the window.
 ### `best`
 
 The largest valid window sum found so far.
+
+## Complexity
+
+Each value enters the window once. Each value leaves the window at most once.
+
+```text
+Time:  O(n)
+Space: O(1)
+```
+
+The trace shows several pieces of state, but the algorithm itself only needs a few variables.
+
+## Recognition Checklist
+
+Before writing code, check:
+
+- Does the problem ask about subarrays or substrings?
+- Is the required length fixed as `k`?
+- Can I update the answer when one value enters and one value leaves?
+- Do I know exactly when the window becomes valid?
+
+If all answers are yes, this fixed-size Sliding Window shape is likely a good fit.
 
 ## What To Remember
 

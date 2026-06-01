@@ -228,11 +228,57 @@ function renderLessonSections(copy) {
       ${recognition.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
     </section>
 
+    <section class="lesson-section code-panel">
+      <h2>${chapter.code.title}</h2>
+      <p>${chapter.code.intro}</p>
+      <pre><code>${chapter.code.lines.map(escapeHtml).join("\n")}</code></pre>
+    </section>
+
+    <section class="lesson-section insight-panel">
+      <h2>${chapter.whatToNotice.title}</h2>
+      <ul class="lesson-list check-list">
+        ${chapter.whatToNotice.items.map((item) => `<li>${item}</li>`).join("")}
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>${chapter.edgeCases.title}</h2>
+      <ul class="lesson-list edge-list">
+        ${chapter.edgeCases.items.map((item) => `<li>${item}</li>`).join("")}
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>${chapter.mistakes.title}</h2>
+      <div class="mistake-grid">
+        ${chapter.mistakes.items.map(([title, text]) => `<article><strong>${title}</strong><p>${text}</p></article>`).join("")}
+      </div>
+    </section>
+
+    <section class="lesson-section practice-panel">
+      <h2>${chapter.practice.title}</h2>
+      <p>${chapter.practice.intro}</p>
+      <ul class="lesson-list">
+        ${chapter.practice.items.map((item) => `<li>${item}</li>`).join("")}
+      </ul>
+      <h3>${chapter.practice.drillsTitle}</h3>
+      <div class="drill-grid">
+        ${chapter.practice.drills.map((drill) => `<code>${drill}</code>`).join("")}
+      </div>
+    </section>
+
     <div class="remember-box">
       <strong>${chapter.remember.title}</strong>
       <p>${chapter.remember.text}</p>
     </div>
   `;
+}
+
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function renderGenericSection(section) {
