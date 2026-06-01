@@ -35,11 +35,7 @@ window.OPENALGOLAB_LOCALES.en = {
 <script src="./locales/es.js"></script>
 ```
 
-6. Add a language button in `visualizer/index.html`:
-
-```html
-<button class="language-button" type="button" data-lang="es">ES</button>
-```
+6. If the language needs a custom flag, add it to `languageFlags` in `visualizer/app.js`. Otherwise the switcher falls back to the uppercase language code.
 
 ## Rules
 
@@ -51,4 +47,4 @@ window.OPENALGOLAB_LOCALES.en = {
 
 ## Why This Structure
 
-The visualizer can stay simple and dependency-free while still allowing contributors to add new languages by editing one locale file and one script/button entry.
+The visualizer can stay simple and dependency-free while still allowing contributors to add new languages by editing one locale file and one script entry. The language menu is built from `window.OPENALGOLAB_LOCALES` automatically.

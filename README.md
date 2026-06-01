@@ -54,6 +54,7 @@ topic/
 The first complete MVP module now exists:
 
 - [Sliding Window: Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/)
+- [Introduction](./docs/introduction.md)
 - [Trace format v0.1](./docs/trace-format.md)
 - [Localization guide](./docs/localization.md)
 - [Local browser visualizer](./visualizer/)

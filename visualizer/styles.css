@@ -104,29 +104,90 @@ code {
 }
 
 .language-switcher {
+  position: relative;
+  width: max-content;
+}
+
+.language-trigger {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.66);
-}
-
-.language-button {
+  width: 48px;
+  height: 48px;
+  place-items: center;
   border: 0;
-  border-radius: 999px;
-  padding: 9px 12px;
-  color: var(--muted);
-  background: transparent;
-  font-weight: 900;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(34, 53, 108, 0.16);
   cursor: pointer;
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
-.language-button.active {
-  color: #ffffff;
-  background: var(--primary);
-  box-shadow: 0 10px 22px rgba(36, 87, 255, 0.22);
+.language-trigger:hover,
+.language-trigger:focus-visible {
+  outline: 3px solid rgba(36, 87, 255, 0.18);
+}
+
+.language-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 180px;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 48px rgba(34, 53, 108, 0.18);
+  backdrop-filter: blur(18px);
+}
+
+.language-menu[hidden] {
+  display: none;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  border-radius: 13px;
+  padding: 9px 10px;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 800;
+  text-align: left;
+}
+
+.language-option:hover,
+.language-option.active {
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+
+.language-option-flag {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(216, 226, 243, 0.9);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .nav-label,
@@ -260,6 +321,15 @@ h2 {
 .lesson-card p {
   color: #344054;
   line-height: 1.72;
+}
+
+.lesson-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #344054;
+  line-height: 1.65;
 }
 
 .lesson-card h2:not(:first-of-type) {

@@ -9,9 +9,10 @@ window.OPENALGOLAB_LOCALES.en = {
     brandSubtitle: "Local visual course",
     navLabel: "Core Patterns",
     items: [
-      { number: "01", title: "Sliding Window", subtitle: "Maximum Sum Subarray of Size K", locked: false },
-      { number: "02", title: "Two Pointers", subtitle: "Coming next", locked: true },
-      { number: "03", title: "BFS", subtitle: "Coming next", locked: true }
+      { id: "intro", number: "00", title: "Introduction", subtitle: "What OpenAlgoLab is", locked: false },
+      { id: "sliding-window", number: "01", title: "Sliding Window", subtitle: "Maximum Sum Subarray of Size K", locked: false },
+      { id: "two-pointers", number: "02", title: "Two Pointers", subtitle: "Coming next", locked: true },
+      { id: "bfs", number: "03", title: "BFS", subtitle: "Coming next", locked: true }
     ],
     noteTitle: "How to study this",
     noteText: "Do not memorize the template. First understand what the window represents, then play the trace step by step."
@@ -77,6 +78,59 @@ window.OPENALGOLAB_LOCALES.en = {
     remember: {
       title: "The concept in one sentence",
       text: "When neighboring contiguous candidates overlap, keep the useful state and update only what changed at the boundaries."
+    }
+  },
+  chapters: {
+    intro: {
+      hasTrace: false,
+      eyebrow: "Chapter 00 · Introduction",
+      title: "Welcome to OpenAlgoLab",
+      hero: "OpenAlgoLab is a free and open-source project for learning algorithms visually, from first principles, and without memorizing templates.",
+      kicker: "About the project",
+      sections: [
+        {
+          title: "What is this project?",
+          paragraphs: [
+            "OpenAlgoLab is a local visual course for algorithms and problem-solving patterns. It combines textbook-style explanations with step-by-step interactive traces, so you can see not only the final code, but the movement of the algorithm.",
+            "The project starts with interview-core patterns, such as Sliding Window, Two Pointers, BFS, Binary Search, and Dynamic Programming. Over time, it is intended to grow into a broader algorithm reference."
+          ]
+        },
+        {
+          title: "Why does it exist?",
+          paragraphs: [
+            "Many algorithm resources show a finished solution too quickly. That can make you memorize code without understanding why the algorithm works.",
+            "OpenAlgoLab takes the opposite route: first the idea, then the state model, then the trace, and only after that the implementation. The goal is to make algorithms feel inspectable rather than mysterious."
+          ]
+        },
+        {
+          title: "How to use it",
+          paragraphs: [
+            "Read the chapter first. Try to understand what state the algorithm keeps and why it is enough.",
+            "Then use the interactive trace. Move step by step and ask: what changed, what stayed the same, what decision did the algorithm make, and why is that decision safe?"
+          ]
+        },
+        {
+          title: "Who made it?",
+          paragraphs: [
+            "OpenAlgoLab was started by Ruslan as a free and open-source learning project. The purpose is to create algorithm explanations that are understandable, visual, and useful for self-study.",
+            "The project is designed for contributors: new topics, translations, traces, examples, and better explanations should be easy to add without changing the whole app."
+          ]
+        },
+        {
+          title: "Project principles",
+          bullets: [
+            "Free and open-source by default.",
+            "Understand the concept before memorizing code.",
+            "Every complete algorithm topic should have a trace.",
+            "Every trace step should explain what happened and why.",
+            "The learning content should be language-agnostic; implementations can be added in multiple languages."
+          ]
+        }
+      ],
+      remember: {
+        title: "Main promise",
+        text: "After a good OpenAlgoLab chapter, you should understand what the algorithm is doing at every step, not just remember which template to paste."
+      }
     }
   },
   lab: {

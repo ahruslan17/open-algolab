@@ -17,7 +17,14 @@ const traceData = {
 const locales = window.OPENALGOLAB_LOCALES || {};
 const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
+let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
 let currentStepIndex = 0;
+let isLanguageMenuOpen = false;
+
+const languageFlags = {
+  en: "🇬🇧",
+  ru: "🇷🇺"
+};
 
 if (!locales[currentLanguage]) {
   currentLanguage = defaultLanguage;
@@ -25,7 +32,10 @@ if (!locales[currentLanguage]) {
 
 const elements = {
   brandSubtitle: document.getElementById("brand-subtitle"),
-  languageButtons: [...document.querySelectorAll(".language-button")],
+  languageTrigger: document.getElementById("language-trigger"),
+  languageTriggerFlag: document.getElementById("language-trigger-flag"),
+  languageTriggerLabel: document.getElementById("language-trigger-label"),
+  languageMenu: document.getElementById("language-menu"),
   navLabel: document.getElementById("nav-label"),
   navItems: document.getElementById("nav-items"),
   sidebarNoteTitle: document.getElementById("sidebar-note-title"),
@@ -35,6 +45,7 @@ const elements = {
   heroCopy: document.getElementById("hero-copy"),
   lessonKicker: document.getElementById("lesson-kicker"),
   lessonSections: document.getElementById("lesson-sections"),
+  labCard: document.getElementById("lab-card"),
   labEyebrow: document.getElementById("lab-eyebrow"),
   traceTitle: document.getElementById("trace-title"),
   pattern: document.getElementById("pattern"),
@@ -80,11 +91,11 @@ function renderNavigation(copy) {
   setText(elements.sidebarNoteText, copy.sidebar.noteText);
 
   elements.navItems.innerHTML = copy.sidebar.items
-    .map((item, index) => {
-      const classes = ["nav-item", index === 0 ? "active" : "", item.locked ? "locked" : ""].filter(Boolean).join(" ");
+    .map((item) => {
+      const classes = ["nav-item", item.id === currentChapterId ? "active" : "", item.locked ? "locked" : ""].filter(Boolean).join(" ");
       const disabled = item.locked ? 'aria-disabled="true"' : "";
       return `
-        <button class="${classes}" type="button" ${disabled}>
+        <button class="${classes}" type="button" data-chapter="${item.id}" ${disabled}>
           <span>${item.number}</span>
           <strong>${item.title}</strong>
           <small>${item.subtitle}</small>
@@ -93,14 +104,59 @@ function renderNavigation(copy) {
     })
     .join("");
 
-  elements.languageButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.lang === currentLanguage);
-    button.setAttribute("aria-pressed", String(button.dataset.lang === currentLanguage));
+  elements.navItems.querySelectorAll(".nav-item:not(.locked)").forEach((button) => {
+    button.addEventListener("click", () => setChapter(button.dataset.chapter));
+  });
+
+  renderLanguageSwitcher();
+}
+
+function getLanguageFlag(language) {
+  return languageFlags[language] || language.toUpperCase().slice(0, 2);
+}
+
+function renderLanguageSwitcher() {
+  const currentLocale = locales[currentLanguage];
+  const currentLabel = currentLocale.meta.label;
+
+  elements.languageTriggerFlag.textContent = getLanguageFlag(currentLanguage);
+  elements.languageTriggerLabel.textContent = currentLabel;
+  elements.languageTrigger.setAttribute("aria-label", currentLabel);
+  elements.languageTrigger.setAttribute("aria-expanded", String(isLanguageMenuOpen));
+  elements.languageMenu.hidden = !isLanguageMenuOpen;
+
+  elements.languageMenu.innerHTML = Object.entries(locales)
+    .map(([language, locale]) => {
+      const active = language === currentLanguage;
+      return `
+        <button class="language-option ${active ? "active" : ""}" type="button" data-lang="${language}" aria-pressed="${active}">
+          <span class="language-option-flag" aria-hidden="true">${getLanguageFlag(language)}</span>
+          <span>${locale.meta.label}</span>
+        </button>
+      `;
+    })
+    .join("");
+
+  elements.languageMenu.querySelectorAll(".language-option").forEach((button) => {
+    button.addEventListener("click", () => setLanguage(button.dataset.lang));
   });
 }
 
 function renderLessonSections(copy) {
-  const [intro, problem, invariant, stateModel, recognition] = copy.lesson.sections;
+  const chapter = getCurrentChapter(copy);
+
+  if (currentChapterId !== "sliding-window") {
+    elements.lessonSections.innerHTML = `
+      ${chapter.sections.map(renderGenericSection).join("")}
+      <div class="remember-box">
+        <strong>${chapter.remember.title}</strong>
+        <p>${chapter.remember.text}</p>
+      </div>
+    `;
+    return;
+  }
+
+  const [intro, problem, invariant, stateModel, recognition] = chapter.sections;
 
   elements.lessonSections.innerHTML = `
     <section class="lesson-section">
@@ -110,16 +166,16 @@ function renderLessonSections(copy) {
 
     <div class="concept-strip" aria-label="Sliding window movement">
       <div>
-        <span>${copy.lesson.conceptStrip.oldLabel}</span>
-        <code>${copy.lesson.conceptStrip.oldWindow}</code>
+        <span>${chapter.conceptStrip.oldLabel}</span>
+        <code>${chapter.conceptStrip.oldWindow}</code>
       </div>
       <div class="arrow">→</div>
       <div>
-        <span>${copy.lesson.conceptStrip.newLabel}</span>
-        <code>${copy.lesson.conceptStrip.newWindow}</code>
+        <span>${chapter.conceptStrip.newLabel}</span>
+        <code>${chapter.conceptStrip.newWindow}</code>
       </div>
     </div>
-    <p>${copy.lesson.conceptStrip.explanation}</p>
+    <p>${chapter.conceptStrip.explanation}</p>
 
     <section class="lesson-section">
       <h2>${problem.title}</h2>
@@ -127,16 +183,16 @@ function renderLessonSections(copy) {
     </section>
 
     <div class="example-box">
-      <span>${copy.lesson.example.inputLabel}</span>
-      <code>${copy.lesson.example.input}</code>
-      <span>${copy.lesson.example.answerLabel}</span>
-      <code>${copy.lesson.example.answer}</code>
+      <span>${chapter.example.inputLabel}</span>
+      <code>${chapter.example.input}</code>
+      <span>${chapter.example.answerLabel}</span>
+      <code>${chapter.example.answer}</code>
     </div>
 
     <section class="lesson-section">
       <h2>${invariant.title}</h2>
       <p>${invariant.paragraphs[0]}</p>
-      <div class="formula-card"><code>${copy.lesson.formula}</code></div>
+      <div class="formula-card"><code>${chapter.formula}</code></div>
       <p>${invariant.paragraphs[1]}</p>
     </section>
 
@@ -155,18 +211,40 @@ function renderLessonSections(copy) {
     </section>
 
     <div class="remember-box">
-      <strong>${copy.lesson.remember.title}</strong>
-      <p>${copy.lesson.remember.text}</p>
+      <strong>${chapter.remember.title}</strong>
+      <p>${chapter.remember.text}</p>
     </div>
   `;
 }
 
+function renderGenericSection(section) {
+  const paragraphs = section.paragraphs ? section.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("") : "";
+  const bullets = section.bullets
+    ? `<ul class="lesson-list">${section.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}</ul>`
+    : "";
+  return `
+    <section class="lesson-section">
+      <h2>${section.title}</h2>
+      ${paragraphs}
+      ${bullets}
+    </section>
+  `;
+}
+
+function getCurrentChapter(copy) {
+  if (currentChapterId === "sliding-window") {
+    return { ...copy.lesson, hasTrace: true };
+  }
+  return copy.chapters[currentChapterId] || copy.chapters.intro;
+}
+
 function renderStaticText(copy) {
+  const chapter = getCurrentChapter(copy);
   document.documentElement.lang = copy.meta.htmlLang;
-  setText(elements.lessonEyebrow, copy.lesson.eyebrow);
-  setText(elements.title, copy.lesson.title);
-  setText(elements.heroCopy, copy.lesson.hero);
-  setText(elements.lessonKicker, copy.lesson.kicker);
+  setText(elements.lessonEyebrow, chapter.eyebrow);
+  setText(elements.title, chapter.title);
+  setText(elements.heroCopy, chapter.hero);
+  setText(elements.lessonKicker, chapter.kicker);
   setText(elements.labEyebrow, copy.lab.eyebrow);
   setText(elements.traceTitle, copy.trace.title);
   setText(elements.currentWindowLabel, copy.lab.currentWindow);
@@ -179,6 +257,7 @@ function renderStaticText(copy) {
   setText(elements.reset, copy.lab.controls.reset);
   renderNavigation(copy);
   renderLessonSections(copy);
+  elements.labCard.hidden = !chapter.hasTrace;
 }
 
 function renderProgress(copy) {
@@ -268,6 +347,13 @@ function renderState(step) {
 
 function render() {
   const copy = t();
+  const chapter = getCurrentChapter(copy);
+
+  if (!chapter.hasTrace) {
+    renderStaticText(copy);
+    return;
+  }
+
   const step = traceData.steps[currentStepIndex];
   const localizedStep = copy.trace.steps[currentStepIndex];
   const state = step.state;
@@ -291,13 +377,53 @@ function render() {
 function setLanguage(language) {
   if (!locales[language]) return;
   currentLanguage = language;
+  isLanguageMenuOpen = false;
   localStorage.setItem("openalgolab-language", language);
   renderStaticText(t());
   render();
 }
 
-elements.languageButtons.forEach((button) => {
-  button.addEventListener("click", () => setLanguage(button.dataset.lang));
+function toggleLanguageMenu() {
+  isLanguageMenuOpen = !isLanguageMenuOpen;
+  renderLanguageSwitcher();
+}
+
+function closeLanguageMenu() {
+  if (!isLanguageMenuOpen) return;
+  isLanguageMenuOpen = false;
+  renderLanguageSwitcher();
+}
+
+function setChapter(chapterId) {
+  const copy = t();
+  const item = copy.sidebar.items.find((navItem) => navItem.id === chapterId);
+  if (!item || item.locked) return;
+
+  currentChapterId = chapterId;
+  currentStepIndex = 0;
+  localStorage.setItem("openalgolab-chapter", chapterId);
+  renderStaticText(copy);
+  if (getCurrentChapter(copy).hasTrace) {
+    render();
+  }
+}
+
+elements.languageTrigger.addEventListener("click", (event) => {
+  event.stopPropagation();
+  toggleLanguageMenu();
+});
+
+elements.languageMenu.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+document.addEventListener("click", closeLanguageMenu);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeLanguageMenu();
+    elements.languageTrigger.focus();
+  }
 });
 
 elements.prev.addEventListener("click", () => {
