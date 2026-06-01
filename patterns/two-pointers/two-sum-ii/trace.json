@@ -56,7 +56,7 @@
         "highlights": [1, 3]
       },
       "decision": "Current sum 8 equals target 8; answer found.",
-      "why": "The values at 1-based indexes [2, 4] add up to 8."
+      "why": "Pointer indexes [1, 3] convert to the 1-based answer [2, 4]."
     }
   ]
 }

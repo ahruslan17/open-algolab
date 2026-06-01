@@ -221,7 +221,7 @@ window.OPENALGOLAB_LOCALES.ru = {
       inputLabel: "Вход",
       input: "numbers = [1, 2, 4, 6, 10], target = 8",
       answerLabel: "Ответ",
-      answer: "[2, 4], потому что numbers[1] + numbers[3] = 2 + 6"
+      answer: "[2, 4] в 1-based формате, потому что numbers[1] + numbers[3] = 2 + 6"
     },
     formula: "current_sum = numbers[left] + numbers[right]",
     code: {
@@ -312,9 +312,9 @@ window.OPENALGOLAB_LOCALES.ru = {
           why: "Оставлять 1 бесполезно: если двигать right влево, сумма станет только меньше или такой же."
         },
         {
-          action: "Сравниваем numbers[1] + numbers[3] = 2 + 6.",
+          action: "Сравниваем numbers[1] + numbers[3] = 2 + 6, где указатели используют 0-based индексы.",
           decision: "Сумма равна 8, target найден.",
-          why: "Значения на индексах [2, 4] в 1-based формате дают сумму 8."
+          why: "Указатели стоят на [1, 3] в 0-based формате, поэтому возвращаемый 1-based ответ — [2, 4]."
         }
       ]
     }

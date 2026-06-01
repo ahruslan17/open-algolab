@@ -101,7 +101,7 @@ def _why_for_move(
     answer: list[int] | None,
 ) -> str:
     if move == "found":
-        return f"The values at 1-based indexes {answer} add up to {target}."
+        return f"Pointer indexes [{left}, {right}] convert to the 1-based answer {answer}."
     if move == "left":
         return (
             f"Keeping {numbers[left]} cannot help because moving right leftward would only make "

@@ -221,7 +221,7 @@ window.OPENALGOLAB_LOCALES.en = {
       inputLabel: "Input",
       input: "numbers = [1, 2, 4, 6, 10], target = 8",
       answerLabel: "Answer",
-      answer: "[2, 4] because numbers[1] + numbers[3] = 2 + 6"
+      answer: "[2, 4] in 1-based indexing because numbers[1] + numbers[3] = 2 + 6"
     },
     formula: "current_sum = numbers[left] + numbers[right]",
     code: {
@@ -312,9 +312,9 @@ window.OPENALGOLAB_LOCALES.en = {
           why: "Keeping 1 cannot help because moving right leftward would only make the sum smaller or equal."
         },
         {
-          action: "Compare numbers[1] + numbers[3] = 2 + 6.",
+          action: "Compare numbers[1] + numbers[3] = 2 + 6 using 0-based pointer indexes.",
           decision: "The sum is 8, so the target is found.",
-          why: "The values at 1-based indexes [2, 4] add up to 8."
+          why: "The pointer indexes are [1, 3] in 0-based form, so the returned 1-based answer is [2, 4]."
         }
       ]
     }

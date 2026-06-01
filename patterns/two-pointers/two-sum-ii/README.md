@@ -14,6 +14,8 @@ answer = [2, 4]
 
 The values at those 1-based positions are `2` and `6`, and `2 + 6 = 8`.
 
+Important indexing note: the algorithm uses 0-based pointer indexes internally (`left = 1`, `right = 3`), but the classic problem returns 1-based answer indexes (`[2, 4]`).
+
 ## Input
 
 - `numbers`: a sorted array of integers;
@@ -85,6 +87,8 @@ When the current sum is too small, every pair using the current `left` with any 
 - `current_sum`: sum of `numbers[left] + numbers[right]`;
 - `target`: the sum we are looking for;
 - `answer`: the found 1-based index pair, when available.
+
+`left` and `right` are 0-based because they are implementation pointers. `answer` is 1-based because that is what the classic problem statement asks to return.
 
 ## Edge Cases
 

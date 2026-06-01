@@ -21,6 +21,8 @@ Reversing these moves makes the algorithm discard the wrong candidates.
 
 The classic Two Sum II problem expects 1-based indexes.
 
+The implementation pointers are usually 0-based, but the returned answer is shifted by `+1`.
+
 If `left = 1` and `right = 3`, the returned answer is:
 
 ```text

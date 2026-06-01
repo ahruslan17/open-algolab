@@ -426,12 +426,12 @@ function renderState(step) {
   const rows = traceData.visualType === "two-pointers"
     ? [
         ["target", traceData.input.target],
-        ["left", state.left],
-        ["right", state.right],
+        ["left_index", state.left],
+        ["right_index", state.right],
         ["pair", formatWindow(state.pair)],
         ["current_sum", state.current_sum],
         ["move", state.move],
-        ["answer", formatWindow(traceData.answer)]
+        ["answer_1based", formatWindow(traceData.answer)]
       ]
     : [
         ["k", traceData.input.k],
@@ -440,7 +440,7 @@ function renderState(step) {
         ["window", formatWindow(state.window)],
         ["window_sum", state.window_sum],
         ["best", state.best],
-        ["removed", state.removed],
+        ["remove_next", state.removed],
         ["answer", traceData.answer]
       ];
 
