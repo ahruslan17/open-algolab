@@ -724,6 +724,15 @@ h2 {
   font-weight: 900;
 }
 
+.lab-card.trace-two-pointers .step-pill {
+  color: #92400e;
+  background: rgba(251, 191, 36, 0.2);
+}
+
+:root[data-theme="dark"] .lab-card.trace-two-pointers .step-pill {
+  color: #fde68a;
+}
+
 .progress-track {
   display: flex;
   gap: 8px;
@@ -773,17 +782,41 @@ h2 {
   padding: clamp(16px, 2vw, 22px);
   border-radius: 26px;
   background:
+    radial-gradient(circle at 12% 18%, rgba(36, 87, 255, 0.14), transparent 16rem),
+    radial-gradient(circle at 88% 12%, rgba(245, 158, 11, 0.12), transparent 14rem),
     linear-gradient(90deg, rgba(36, 87, 255, 0.08) 1px, transparent 1px),
     linear-gradient(180deg, rgba(36, 87, 255, 0.08) 1px, transparent 1px),
     #ffffff;
   background-size: 34px 34px;
   border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.lab-card.trace-two-pointers .visual-stage {
+  background:
+    radial-gradient(circle at 14% 20%, rgba(251, 191, 36, 0.18), transparent 16rem),
+    radial-gradient(circle at 88% 16%, rgba(36, 87, 255, 0.12), transparent 14rem),
+    linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    #ffffff;
+  background-size: 34px 34px;
 }
 
 :root[data-theme="dark"] .visual-stage {
   background:
+    radial-gradient(circle at 12% 18%, rgba(122, 162, 255, 0.16), transparent 16rem),
+    radial-gradient(circle at 88% 12%, rgba(251, 191, 36, 0.1), transparent 14rem),
     linear-gradient(90deg, rgba(122, 162, 255, 0.1) 1px, transparent 1px),
     linear-gradient(180deg, rgba(122, 162, 255, 0.1) 1px, transparent 1px),
+    rgba(7, 11, 20, 0.72);
+}
+
+:root[data-theme="dark"] .lab-card.trace-two-pointers .visual-stage {
+  background:
+    radial-gradient(circle at 14% 20%, rgba(251, 191, 36, 0.14), transparent 16rem),
+    radial-gradient(circle at 88% 16%, rgba(122, 162, 255, 0.12), transparent 14rem),
+    linear-gradient(90deg, rgba(251, 191, 36, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(251, 191, 36, 0.08) 1px, transparent 1px),
     rgba(7, 11, 20, 0.72);
 }
 
@@ -816,8 +849,26 @@ h2 {
   box-shadow: inset 0 -5px 0 rgba(36, 87, 255, 0.12);
 }
 
+.cell.left-active:not(.in-window),
+.cell.right-active:not(.in-window) {
+  border-color: rgba(245, 158, 11, 0.64);
+  background: linear-gradient(180deg, rgba(255, 243, 207, 0.96), #ffffff);
+  box-shadow: inset 0 -5px 0 rgba(245, 158, 11, 0.16);
+}
+
+.lab-card.trace-two-pointers .cell.highlighted {
+  transform: translateY(-7px) scale(1.025);
+  border-color: var(--accent);
+  box-shadow: 0 20px 36px rgba(245, 158, 11, 0.22), inset 0 -5px 0 rgba(245, 158, 11, 0.18);
+}
+
 :root[data-theme="dark"] .cell.in-window {
   background: linear-gradient(180deg, rgba(122, 162, 255, 0.2), rgba(18, 28, 48, 0.95));
+}
+
+:root[data-theme="dark"] .cell.left-active:not(.in-window),
+:root[data-theme="dark"] .cell.right-active:not(.in-window) {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.2), rgba(18, 28, 48, 0.95));
 }
 
 .cell.highlighted {
@@ -870,6 +921,14 @@ h2 {
   background: var(--primary);
 }
 
+.lab-card.trace-two-pointers .left-pointer {
+  background: linear-gradient(135deg, #0f172a, #475569);
+}
+
+.lab-card.trace-two-pointers .right-pointer {
+  background: linear-gradient(135deg, var(--accent), #ea580c);
+}
+
 .window-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -879,11 +938,21 @@ h2 {
 .window-summary div {
   padding: 16px;
   border-radius: 18px;
+  border: 1px solid rgba(36, 87, 255, 0.12);
   background: rgba(239, 244, 255, 0.84);
+}
+
+.lab-card.trace-two-pointers .window-summary div {
+  border-color: rgba(245, 158, 11, 0.18);
+  background: rgba(255, 243, 207, 0.62);
 }
 
 :root[data-theme="dark"] .window-summary div {
   background: rgba(122, 162, 255, 0.13);
+}
+
+:root[data-theme="dark"] .lab-card.trace-two-pointers .window-summary div {
+  background: rgba(251, 191, 36, 0.11);
 }
 
 .window-summary span,
@@ -913,6 +982,32 @@ h2 {
   background: #ffffff;
 }
 
+.state-card:nth-child(1),
+.state-card:nth-child(2),
+.state-card:nth-child(3) {
+  border-color: rgba(36, 87, 255, 0.16);
+  background: linear-gradient(180deg, rgba(239, 244, 255, 0.9), #ffffff);
+}
+
+.lab-card.trace-two-pointers .state-card:nth-child(1),
+.lab-card.trace-two-pointers .state-card:nth-child(2),
+.lab-card.trace-two-pointers .state-card:nth-child(3) {
+  border-color: rgba(245, 158, 11, 0.22);
+  background: linear-gradient(180deg, rgba(255, 243, 207, 0.76), #ffffff);
+}
+
+:root[data-theme="dark"] .state-card:nth-child(1),
+:root[data-theme="dark"] .state-card:nth-child(2),
+:root[data-theme="dark"] .state-card:nth-child(3) {
+  background: linear-gradient(180deg, rgba(122, 162, 255, 0.14), rgba(18, 28, 48, 0.82));
+}
+
+:root[data-theme="dark"] .lab-card.trace-two-pointers .state-card:nth-child(1),
+:root[data-theme="dark"] .lab-card.trace-two-pointers .state-card:nth-child(2),
+:root[data-theme="dark"] .lab-card.trace-two-pointers .state-card:nth-child(3) {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.14), rgba(18, 28, 48, 0.82));
+}
+
 .state-card strong {
   display: block;
   overflow-wrap: anywhere;
@@ -921,13 +1016,27 @@ h2 {
 
 .trace-explanation {
   display: grid;
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   margin-bottom: 18px;
   padding: clamp(16px, 2vw, 22px);
   border-radius: 24px;
   color: #ffffff;
   background:
     radial-gradient(circle at top right, rgba(36, 87, 255, 0.34), transparent 20rem),
+    var(--dark);
+}
+
+.trace-explanation > div {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.lab-card.trace-two-pointers .trace-explanation {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.24), transparent 20rem),
     var(--dark);
 }
 
@@ -1004,6 +1113,10 @@ h2 {
 
   #lesson-sections {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trace-explanation {
+    grid-template-columns: 1fr;
   }
 }
 

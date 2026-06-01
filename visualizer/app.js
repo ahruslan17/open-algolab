@@ -396,6 +396,7 @@ function renderArray(step, copy) {
     pointerRow.className = "pointers";
 
     if (index === state.left) {
+      cell.classList.add("left-active");
       const left = document.createElement("span");
       left.className = "left-pointer";
       left.textContent = "L";
@@ -403,6 +404,7 @@ function renderArray(step, copy) {
     }
 
     if (index === state.right) {
+      cell.classList.add("right-active");
       const right = document.createElement("span");
       right.className = "right-pointer";
       right.textContent = "R";
@@ -462,6 +464,9 @@ function render() {
   const step = traceData.steps[currentStepIndex];
   const localizedStep = chapter.trace.steps[currentStepIndex];
   const state = step.state;
+
+  elements.labCard.classList.remove("trace-array-window", "trace-two-pointers");
+  elements.labCard.classList.add(`trace-${traceData.visualType}`);
 
   setText(elements.pattern, `${chapter.trace.pattern} · ${copy.lab.patternSuffixes[traceData.visualType]}`);
   setText(elements.counter, `${copy.lab.stepLabel} ${step.step} / ${traceData.steps.length}`);
