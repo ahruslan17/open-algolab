@@ -1,87 +1,125 @@
 # OpenAlgoLab
 
-Free and open-source algorithms lab for visual, intuition-first learning.
+OpenAlgoLab is a free and open-source algorithms learning lab focused on visual, intuition-first explanations.
 
-OpenAlgoLab is a free and open-source project for learning algorithms and interview patterns from first principles.
-
-The goal is not to memorize solutions. The goal is to understand how an algorithm moves, why it works, when to use it, and where it usually breaks.
-
-## Why This Exists
-
-Many algorithm resources jump too quickly from a problem statement to code. That works when you already understand the pattern, but it is frustrating when you are still building intuition.
-
-OpenAlgoLab is built around a different order:
-
-1. Intuition
-2. Visual trace
-3. Step-by-step state changes
-4. Clean implementation
-5. Common mistakes
-6. Practice problems
-7. Interview variations
-
-## Principles
-
-- Free forever: the core learning material should be available to everyone.
-- Open-source: explanations, code, diagrams, and examples should be easy to inspect and improve.
-- Intuition first: every topic starts with the idea behind the algorithm, not the final code.
-- Visual when useful: algorithms should be shown through traces, tables, diagrams, or animations when that makes them easier to understand.
-- Practical: each topic should explain when to use the pattern and how to recognize it in problems.
-- Honest about mistakes: edge cases, wrong approaches, and common traps are part of the learning material.
-
-## Who It Is For
-
-- Students learning algorithms for the first time.
-- Developers preparing for coding interviews.
-- Self-taught programmers who want stronger fundamentals.
-- Anyone who prefers visual and intuition-first explanations over memorization.
-
-## Planned Structure
-
-Each topic should eventually follow the same learning format:
+It is built for people who do not want to memorize templates blindly. Each finished topic explains how an algorithm moves, what state it keeps, why each decision is safe, where mistakes usually happen, and how to practice the pattern.
 
 ```text
-topic/
-  intuition.md        # The core idea in plain language
-  trace.md            # Step-by-step execution on examples
-  implementation.py   # Clean reference implementation
-  mistakes.md         # Common bugs and edge cases
-  problems.md         # Practice problems and variations
+Algorithm -> Trace -> Explanation -> Implementation -> Practice
 ```
 
-## MVP Quick Start
+## What Makes It Different
 
-The first complete learning modules now exist:
+- **Trace-first learning**: algorithms are explained as step-by-step state changes, not only as final code.
+- **Visual intuition**: each topic is designed around the mental model behind the pattern.
+- **Practical interview focus**: examples are based on common problem shapes, edge cases, and variations.
+- **Common mistakes included**: wrong update order, off-by-one errors, bad initialization, and other traps are part of the learning material.
+- **Bilingual visualizer**: the local browser visualizer currently supports English and Russian.
+- **No backend required**: the visualizer is a static browser app and runs locally.
 
-- [Sliding Window: Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/)
-- [Two Pointers: Two Sum II](./patterns/two-pointers/two-sum-ii/)
+## Current Modules
+
+| Chapter | Pattern | Problem | Status |
+|---|---|---|---|
+| 01 | Sliding Window | [Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/) | Complete MVP |
+| 02 | Two Pointers | [Two Sum II](./patterns/two-pointers/two-sum-ii/) | Complete MVP |
+
+Supporting docs:
+
 - [Introduction](./docs/introduction.md)
+- [Architecture](./docs/architecture.md)
 - [Trace format v0.1](./docs/trace-format.md)
 - [Localization guide](./docs/localization.md)
 - [Local browser visualizer](./visualizer/)
 
-Run the local static server from the repository root:
+## Quick Start
+
+Run a local static server from the repository root:
 
 ```bash
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then open:
+Open the visualizer:
 
 ```text
 http://127.0.0.1:8000/visualizer/
 ```
 
-The visualizer runs fully in the browser. There is no backend, account system, or SaaS dependency.
+The visualizer runs fully in the browser. There is no backend, database, account system, or SaaS dependency.
 
-The MVP visualizer is structured as a small local course interface: a chapter menu, a text explanation, and an interactive trace panel for the selected algorithm.
+## Learning Format
 
-It currently supports English and Russian via dependency-free locale files.
+Each topic is designed to answer the same core questions:
 
-## Initial Roadmap
+- What problem shape does this algorithm solve?
+- What is the simplest mental model for it?
+- What state does the algorithm keep?
+- How does that state change after each step?
+- Why is each pointer/window/state update correct?
+- What are the most common implementation mistakes?
+- Which related problems should I practice next?
 
-- Sliding window
-- Two pointers
+A complete module usually contains:
+
+```text
+topic/
+  README.md              # Overview, problem shape, algorithm, edge cases
+  intuition.md           # The core idea in plain language
+  trace.md               # GitHub-readable step-by-step trace
+  trace.json             # Source-of-truth trace data
+  common-mistakes.md     # Frequent bugs and wrong approaches
+  problems.md            # Practice problems and variations
+  implementations/
+    python.py            # Reference implementation and trace generator
+```
+
+## Repository Structure
+
+```text
+open-algolab/
+  docs/                  # Architecture, trace format, localization notes
+  patterns/              # Algorithm pattern modules
+    sliding-window/
+    two-pointers/
+  visualizer/            # Dependency-free local browser visualizer
+  README.md
+  LICENSE
+```
+
+## Core Idea
+
+OpenAlgoLab is built around one principle:
+
+```text
+Algorithm -> Trace -> Renderer
+```
+
+An algorithm should not only return an answer. It should also be explainable as a sequence of visible decisions:
+
+```text
+input -> current state -> decision -> state update -> why this step is correct
+```
+
+The trace is the learning source of truth. Markdown pages, the browser visualizer, CLI tools, and future renderers should all be able to describe the same algorithm movement.
+
+## Who This Is For
+
+- Students learning algorithms for the first time.
+- Developers preparing for coding interviews.
+- Self-taught programmers who want stronger fundamentals.
+- Anyone who prefers visual, step-by-step explanations over memorized templates.
+
+## Roadmap
+
+Current focus:
+
+- Improve the shared trace and lesson rendering model.
+- Add more high-signal interview patterns before broad coverage.
+- Keep the project simple, static, and easy to contribute to.
+
+Planned pattern areas:
+
 - Binary search
 - Prefix sums
 - Stacks and monotonic stacks
@@ -90,31 +128,25 @@ It currently supports English and Russian via dependency-free locale files.
 - Dijkstra's algorithm
 - Dynamic programming patterns
 
-## Example Topic Goals
-
-A finished topic should help answer questions like:
-
-- What problem shape does this algorithm solve?
-- What is the simplest mental model for it?
-- What state does the algorithm keep?
-- How does that state change after each step?
-- What are the most common edge cases?
-- How do interview problems usually disguise this pattern?
-
 ## Contributing
 
-The project is in an early stage, so the best contributions are simple and educational:
+OpenAlgoLab is early-stage, so the best contributions are simple and educational:
 
 - Fix unclear explanations.
 - Add small examples.
-- Add visual traces.
-- Add common mistakes and edge cases.
-- Improve existing implementations without making them clever.
+- Improve visual traces.
+- Add edge cases and common mistakes.
+- Add practice variations.
+- Improve implementations without making them clever.
 
-Please keep explanations beginner-friendly and avoid unnecessary abstractions.
+Please keep explanations beginner-friendly, explicit, and practical. Prefer clear educational code over compact tricks.
 
-## Status
+## Support
 
-OpenAlgoLab has two complete MVP modules: Sliding Window / Maximum Sum Subarray of Size K and Two Pointers / Two Sum II.
+OpenAlgoLab is free and open-source. If it helps you learn algorithms or prepare for interviews, you can support the project when donation links are added.
 
-The next milestone is to use these modules as templates for additional algorithm patterns and to reduce duplication in trace and lesson rendering.
+Support is optional. The core learning materials will remain free.
+
+## License
+
+OpenAlgoLab is released under the [MIT License](./LICENSE).
