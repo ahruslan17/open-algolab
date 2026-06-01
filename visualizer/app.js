@@ -1,17 +1,31 @@
-const traceData = {
-  version: "0.1",
-  id: "sliding-window-max-sum-subarray-k",
-  visualType: "array-window",
-  input: { nums: [2, 1, 5, 1, 3, 2], k: 3 },
-  answer: 9,
-  steps: [
-    { step: 1, state: { left: 0, right: 0, windowStart: 0, windowEnd: 0, window: [2], window_sum: 2, best: null, removed: null, highlights: [0] } },
-    { step: 2, state: { left: 0, right: 1, windowStart: 0, windowEnd: 1, window: [2, 1], window_sum: 3, best: null, removed: null, highlights: [1] } },
-    { step: 3, state: { left: 0, right: 2, windowStart: 0, windowEnd: 2, window: [2, 1, 5], window_sum: 8, best: 8, removed: 2, highlights: [0, 1, 2] } },
-    { step: 4, state: { left: 1, right: 3, windowStart: 1, windowEnd: 3, window: [1, 5, 1], window_sum: 7, best: 8, removed: 1, highlights: [1, 2, 3] } },
-    { step: 5, state: { left: 2, right: 4, windowStart: 2, windowEnd: 4, window: [5, 1, 3], window_sum: 9, best: 9, removed: 5, highlights: [2, 3, 4] } },
-    { step: 6, state: { left: 3, right: 5, windowStart: 3, windowEnd: 5, window: [1, 3, 2], window_sum: 6, best: 9, removed: 1, highlights: [3, 4, 5] } }
-  ]
+const traceDataByChapter = {
+  "sliding-window": {
+    version: "0.1",
+    id: "sliding-window-max-sum-subarray-k",
+    visualType: "array-window",
+    input: { nums: [2, 1, 5, 1, 3, 2], k: 3 },
+    answer: 9,
+    steps: [
+      { step: 1, state: { left: 0, right: 0, windowStart: 0, windowEnd: 0, window: [2], window_sum: 2, best: null, removed: null, highlights: [0] } },
+      { step: 2, state: { left: 0, right: 1, windowStart: 0, windowEnd: 1, window: [2, 1], window_sum: 3, best: null, removed: null, highlights: [1] } },
+      { step: 3, state: { left: 0, right: 2, windowStart: 0, windowEnd: 2, window: [2, 1, 5], window_sum: 8, best: 8, removed: 2, highlights: [0, 1, 2] } },
+      { step: 4, state: { left: 1, right: 3, windowStart: 1, windowEnd: 3, window: [1, 5, 1], window_sum: 7, best: 8, removed: 1, highlights: [1, 2, 3] } },
+      { step: 5, state: { left: 2, right: 4, windowStart: 2, windowEnd: 4, window: [5, 1, 3], window_sum: 9, best: 9, removed: 5, highlights: [2, 3, 4] } },
+      { step: 6, state: { left: 3, right: 5, windowStart: 3, windowEnd: 5, window: [1, 3, 2], window_sum: 6, best: 9, removed: 1, highlights: [3, 4, 5] } }
+    ]
+  },
+  "two-pointers": {
+    version: "0.1",
+    id: "two-pointers-two-sum-ii",
+    visualType: "two-pointers",
+    input: { numbers: [1, 2, 4, 6, 10], target: 8 },
+    answer: [2, 4],
+    steps: [
+      { step: 1, state: { left: 0, right: 4, pair: [1, 10], current_sum: 11, target: 8, answer: null, move: "right", highlights: [0, 4] } },
+      { step: 2, state: { left: 0, right: 3, pair: [1, 6], current_sum: 7, target: 8, answer: null, move: "left", highlights: [0, 3] } },
+      { step: 3, state: { left: 1, right: 3, pair: [2, 6], current_sum: 8, target: 8, answer: [2, 4], move: "found", highlights: [1, 3] } }
+    ]
+  }
 };
 
 const locales = window.OPENALGOLAB_LOCALES || {};
@@ -82,6 +96,10 @@ function formatValue(value) {
 
 function formatWindow(windowValues) {
   return `[${windowValues.join(", ")}]`;
+}
+
+function getTraceData() {
+  return traceDataByChapter[currentChapterId];
 }
 
 function setText(element, value) {
@@ -163,7 +181,7 @@ function renderLanguageSwitcher() {
 function renderLessonSections(copy) {
   const chapter = getCurrentChapter(copy);
 
-  if (currentChapterId !== "sliding-window") {
+  if (!chapter.code) {
     elements.lessonSections.innerHTML = `
       ${chapter.sections.map(renderGenericSection).join("")}
       <div class="remember-box">
@@ -182,7 +200,7 @@ function renderLessonSections(copy) {
       ${intro.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
     </section>
 
-    <div class="concept-strip" aria-label="Sliding window movement">
+    <div class="concept-strip" aria-label="${chapter.conceptStrip.ariaLabel}">
       <div>
         <span>${chapter.conceptStrip.oldLabel}</span>
         <code>${chapter.conceptStrip.oldWindow}</code>
@@ -297,8 +315,17 @@ function renderGenericSection(section) {
 
 function getCurrentChapter(copy) {
   if (currentChapterId === "sliding-window") {
-    return { ...copy.lesson, hasTrace: true };
+    return {
+      ...copy.lesson,
+      hasTrace: true,
+      summaryLabels: {
+        current: copy.lab.currentWindow,
+        answer: copy.lab.bestAnswer
+      },
+      trace: copy.trace
+    };
   }
+  if (currentChapterId === "two-pointers") return { ...copy.twoPointers, hasTrace: true };
   return copy.chapters[currentChapterId] || copy.chapters.intro;
 }
 
@@ -310,9 +337,9 @@ function renderStaticText(copy) {
   setText(elements.heroCopy, chapter.hero);
   setText(elements.lessonKicker, chapter.kicker);
   setText(elements.labEyebrow, copy.lab.eyebrow);
-  setText(elements.traceTitle, copy.trace.title);
-  setText(elements.currentWindowLabel, copy.lab.currentWindow);
-  setText(elements.bestAnswerLabel, copy.lab.bestAnswer);
+  setText(elements.traceTitle, chapter.trace ? chapter.trace.title : "");
+  setText(elements.currentWindowLabel, chapter.summaryLabels ? chapter.summaryLabels.current : copy.lab.currentWindow);
+  setText(elements.bestAnswerLabel, chapter.summaryLabels ? chapter.summaryLabels.answer : copy.lab.bestAnswer);
   setText(elements.actionLabel, copy.lab.labels.action);
   setText(elements.decisionLabel, copy.lab.labels.decision);
   setText(elements.whyLabel, copy.lab.labels.why);
@@ -325,6 +352,7 @@ function renderStaticText(copy) {
 }
 
 function renderProgress(copy) {
+  const traceData = getTraceData();
   elements.progress.innerHTML = traceData.steps
     .map((step, index) => {
       const stateClass = index === currentStepIndex ? "current" : index < currentStepIndex ? "done" : "";
@@ -341,8 +369,9 @@ function renderProgress(copy) {
 }
 
 function renderArray(step, copy) {
+  const traceData = getTraceData();
   const state = step.state;
-  const nums = traceData.input.nums;
+  const nums = traceData.input.nums || traceData.input.numbers;
   const highlights = new Set(state.highlights || []);
 
   elements.array.innerHTML = "";
@@ -351,7 +380,7 @@ function renderArray(step, copy) {
     const cell = document.createElement("div");
     cell.className = "cell";
 
-    if (index >= state.windowStart && index <= state.windowEnd) {
+    if (traceData.visualType === "array-window" && index >= state.windowStart && index <= state.windowEnd) {
       cell.classList.add("in-window");
     }
 
@@ -359,7 +388,7 @@ function renderArray(step, copy) {
       cell.classList.add("highlighted");
     }
 
-    if (state.best === state.window_sum && state.window.length === traceData.input.k) {
+    if (traceData.visualType === "array-window" && state.best === state.window_sum && state.window.length === traceData.input.k) {
       cell.classList.add("candidate-best");
     }
 
@@ -392,17 +421,28 @@ function renderArray(step, copy) {
 }
 
 function renderState(step) {
+  const traceData = getTraceData();
   const state = step.state;
-  const rows = [
-    ["k", traceData.input.k],
-    ["left", state.left],
-    ["right", state.right],
-    ["window", formatWindow(state.window)],
-    ["window_sum", state.window_sum],
-    ["best", state.best],
-    ["removed", state.removed],
-    ["answer", traceData.answer]
-  ];
+  const rows = traceData.visualType === "two-pointers"
+    ? [
+        ["target", traceData.input.target],
+        ["left", state.left],
+        ["right", state.right],
+        ["pair", formatWindow(state.pair)],
+        ["current_sum", state.current_sum],
+        ["move", state.move],
+        ["answer", formatWindow(traceData.answer)]
+      ]
+    : [
+        ["k", traceData.input.k],
+        ["left", state.left],
+        ["right", state.right],
+        ["window", formatWindow(state.window)],
+        ["window_sum", state.window_sum],
+        ["best", state.best],
+        ["removed", state.removed],
+        ["answer", traceData.answer]
+      ];
 
   elements.state.innerHTML = rows
     .map(([label, value]) => `<div class="state-card"><span>${label}</span><strong>${formatValue(value)}</strong></div>`)
@@ -412,20 +452,21 @@ function renderState(step) {
 function render() {
   const copy = t();
   const chapter = getCurrentChapter(copy);
+  const traceData = getTraceData();
 
-  if (!chapter.hasTrace) {
+  if (!chapter.hasTrace || !traceData) {
     renderStaticText(copy);
     return;
   }
 
   const step = traceData.steps[currentStepIndex];
-  const localizedStep = copy.trace.steps[currentStepIndex];
+  const localizedStep = chapter.trace.steps[currentStepIndex];
   const state = step.state;
 
-  setText(elements.pattern, `${copy.trace.pattern} · ${copy.lab.patternSuffix}`);
+  setText(elements.pattern, `${chapter.trace.pattern} · ${copy.lab.patternSuffixes[traceData.visualType]}`);
   setText(elements.counter, `${copy.lab.stepLabel} ${step.step} / ${traceData.steps.length}`);
-  setText(elements.windowValues, formatWindow(state.window));
-  setText(elements.bestAnswer, formatValue(state.best));
+  setText(elements.windowValues, traceData.visualType === "two-pointers" ? formatWindow(state.pair) : formatWindow(state.window));
+  setText(elements.bestAnswer, traceData.visualType === "two-pointers" ? formatWindow(traceData.answer) : formatValue(state.best));
   setText(elements.action, localizedStep.action);
   setText(elements.decision, localizedStep.decision);
   setText(elements.why, localizedStep.why);
@@ -498,7 +539,7 @@ elements.prev.addEventListener("click", () => {
 });
 
 elements.next.addEventListener("click", () => {
-  currentStepIndex = Math.min(traceData.steps.length - 1, currentStepIndex + 1);
+  currentStepIndex = Math.min(getTraceData().steps.length - 1, currentStepIndex + 1);
   render();
 });
 

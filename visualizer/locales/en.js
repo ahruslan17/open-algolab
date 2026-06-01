@@ -11,7 +11,7 @@ window.OPENALGOLAB_LOCALES.en = {
     items: [
       { id: "intro", number: "00", title: "Introduction", subtitle: "What OpenAlgoLab is", locked: false },
       { id: "sliding-window", number: "01", title: "Sliding Window", subtitle: "Maximum Sum Subarray of Size K", locked: false },
-      { id: "two-pointers", number: "02", title: "Two Pointers", subtitle: "Coming next", locked: true },
+      { id: "two-pointers", number: "02", title: "Two Pointers", subtitle: "Two Sum II", locked: false },
       { id: "bfs", number: "03", title: "BFS", subtitle: "Coming next", locked: true }
     ],
     noteTitle: "How to study this",
@@ -67,6 +67,7 @@ window.OPENALGOLAB_LOCALES.en = {
       }
     ],
     conceptStrip: {
+      ariaLabel: "Sliding window movement",
       oldLabel: "Current frame",
       oldWindow: "[2, 1, 5] sum = 8",
       newLabel: "After sliding",
@@ -155,6 +156,169 @@ window.OPENALGOLAB_LOCALES.en = {
       text: "When neighboring contiguous candidates overlap, keep the useful state, evaluate each valid window exactly once, and update only what changed at the boundaries."
     }
   },
+  twoPointers: {
+    eyebrow: "Chapter 02 · Opposite-direction Two Pointers",
+    title: "Two Sum II",
+    hero: "Two Pointers uses the sorted order of an array to turn one comparison into a safe movement decision.",
+    kicker: "Sorted order creates direction",
+    summaryLabels: {
+      current: "Current pair",
+      answer: "Answer indexes"
+    },
+    sections: [
+      {
+        title: "Start with the two ends",
+        paragraphs: [
+          "Imagine the sorted array as a line of numbers. Put one pointer at the smallest value and one pointer at the largest value.",
+          "The current pair gives a sum. Because the array is sorted, that sum tells us which side can move safely.",
+          "If the sum is too small, we need a larger value, so left moves right. If the sum is too large, we need a smaller value, so right moves left."
+        ]
+      },
+      {
+        title: "What problem are we solving here?",
+        paragraphs: [
+          "Given numbers = [1, 2, 4, 6, 10] and target = 8, we need two values that add up to 8.",
+          "A brute-force solution checks every pair. That is correct, but it ignores sorted order.",
+          "Two Pointers reduces O(n^2) pair checking to O(n) by discarding many impossible pairs after each comparison."
+        ]
+      },
+      {
+        title: "The key observation",
+        paragraphs: [
+          "Start with 1 + 10 = 11. The sum is too large. Keeping 10 cannot help because moving left rightward would only make the sum larger, so right must move left.",
+          "Then 1 + 6 = 7. The sum is too small. Keeping 1 cannot help because moving right leftward would only make the sum smaller, so left must move right.",
+          "Finally 2 + 6 = 8. The target is found."
+        ]
+      },
+      {
+        title: "State model",
+        stateModel: [
+          ["left", "Index of the smaller current candidate."],
+          ["right", "Index of the larger current candidate."],
+          ["current_sum", "numbers[left] + numbers[right]."],
+          ["target", "The sum we need to reach."],
+          ["invariant", "If a valid pair still exists, it is inside [left, right]."]
+        ]
+      },
+      {
+        title: "The mental rule",
+        paragraphs: [
+          "Use opposite-direction Two Pointers when sorted order makes a pointer move safe.",
+          "For pair sums, too small means move left rightward; too large means move right leftward.",
+          "The algorithm is not guessing. Each move discards only pairs that cannot be the answer."
+        ]
+      }
+    ],
+    conceptStrip: {
+      ariaLabel: "Two pointers movement",
+      oldLabel: "Too large",
+      oldWindow: "1 + 10 = 11 > 8, move right",
+      newLabel: "Too small",
+      newWindow: "1 + 6 = 7 < 8, move left",
+      explanation: "Sorted order gives direction. When the sum is too high, decrease the larger side. When the sum is too low, increase the smaller side."
+    },
+    example: {
+      inputLabel: "Input",
+      input: "numbers = [1, 2, 4, 6, 10], target = 8",
+      answerLabel: "Answer",
+      answer: "[2, 4] because numbers[1] + numbers[3] = 2 + 6"
+    },
+    formula: "current_sum = numbers[left] + numbers[right]",
+    code: {
+      title: "Reference implementation",
+      intro: "The code follows the trace: compare the current pair, then move the pointer that can safely discard impossible pairs.",
+      lines: [
+        "def two_sum_ii(numbers, target):",
+        "    left = 0",
+        "    right = len(numbers) - 1",
+        "",
+        "    while left < right:",
+        "        current_sum = numbers[left] + numbers[right]",
+        "",
+        "        if current_sum == target:",
+        "            return [left + 1, right + 1]",
+        "",
+        "        if current_sum < target:",
+        "            left += 1",
+        "        else:",
+        "            right -= 1",
+        "",
+        "    raise ValueError(\"no pair adds up to target\")"
+      ]
+    },
+    whatToNotice: {
+      title: "What to notice in the trace",
+      items: [
+        "The pointers start at opposite ends to test the widest pair.",
+        "Every comparison discards a group of impossible pairs.",
+        "If the sum is too large, right moves left.",
+        "If the sum is too small, left moves right.",
+        "The classic problem returns 1-based indexes, not 0-based indexes."
+      ]
+    },
+    edgeCases: {
+      title: "Edge cases",
+      items: [
+        "Exactly two numbers: the first comparison decides the answer.",
+        "Negative numbers still work if the array is sorted.",
+        "Duplicate values are valid if they live at different indexes.",
+        "Some variants do not guarantee an answer, so handle the not-found case."
+      ]
+    },
+    mistakes: {
+      title: "Common mistakes",
+      items: [
+        ["Forgetting sorted order", "The movement logic only works because the input is sorted."],
+        ["Moving the wrong pointer", "Too small moves left rightward; too large moves right leftward."],
+        ["Returning 0-based indexes", "The classic problem expects 1-based indexes."],
+        ["Continuing after found", "Return as soon as current_sum equals target."],
+        ["Using nested loops by habit", "Sorted order lets one comparison discard many pairs."]
+      ]
+    },
+    practice: {
+      title: "Practice next",
+      intro: "Use the same inward movement with different decisions.",
+      items: [
+        "Valid Palindrome",
+        "Squares of a Sorted Array",
+        "Container With Most Water",
+        "3Sum",
+        "4Sum"
+      ],
+      drillsTitle: "Mini drills",
+      drills: [
+        "[1, 2], target = 3 -> [1, 2]",
+        "[1, 2, 4, 6, 10], target = 8 -> [2, 4]",
+        "[-3, -1, 0, 2, 4], target = 1 -> [1, 5]",
+        "[2, 2, 3, 4], target = 4 -> [1, 2]"
+      ]
+    },
+    remember: {
+      title: "The concept in one sentence",
+      text: "When sorted order makes one side provably too small or too large, move the pointer that safely discards impossible pairs."
+    },
+    trace: {
+      title: "Two Sum II",
+      pattern: "Two Pointers",
+      steps: [
+        {
+          action: "Compare numbers[0] + numbers[4] = 1 + 10.",
+          decision: "The sum is 11, which is greater than target = 8, so right moves left.",
+          why: "Keeping 10 cannot help because moving left rightward would only make the sum larger or equal."
+        },
+        {
+          action: "Compare numbers[0] + numbers[3] = 1 + 6.",
+          decision: "The sum is 7, which is smaller than target = 8, so left moves right.",
+          why: "Keeping 1 cannot help because moving right leftward would only make the sum smaller or equal."
+        },
+        {
+          action: "Compare numbers[1] + numbers[3] = 2 + 6.",
+          decision: "The sum is 8, so the target is found.",
+          why: "The values at 1-based indexes [2, 4] add up to 8."
+        }
+      ]
+    }
+  },
   chapters: {
     intro: {
       hasTrace: false,
@@ -210,7 +374,10 @@ window.OPENALGOLAB_LOCALES.en = {
   },
   lab: {
     eyebrow: "Interactive Trace",
-    patternSuffix: "array-window",
+    patternSuffixes: {
+      "array-window": "array-window",
+      "two-pointers": "opposite-direction"
+    },
     stepLabel: "Step",
     currentWindow: "Current window",
     bestAnswer: "Best answer",

@@ -1,0 +1,62 @@
+{
+  "version": "0.1",
+  "id": "two-pointers-two-sum-ii",
+  "title": "Two Sum II",
+  "pattern": "Two Pointers",
+  "visualType": "two-pointers",
+  "input": {
+    "numbers": [1, 2, 4, 6, 10],
+    "target": 8
+  },
+  "answer": [2, 4],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Compare numbers[0] + numbers[4] = 1 + 10.",
+      "state": {
+        "left": 0,
+        "right": 4,
+        "pair": [1, 10],
+        "current_sum": 11,
+        "target": 8,
+        "answer": null,
+        "move": "right",
+        "highlights": [0, 4]
+      },
+      "decision": "Current sum 11 is greater than target 8; move right leftward.",
+      "why": "Keeping 10 cannot help because moving left rightward would only make the sum larger or equal."
+    },
+    {
+      "step": 2,
+      "action": "Compare numbers[0] + numbers[3] = 1 + 6.",
+      "state": {
+        "left": 0,
+        "right": 3,
+        "pair": [1, 6],
+        "current_sum": 7,
+        "target": 8,
+        "answer": null,
+        "move": "left",
+        "highlights": [0, 3]
+      },
+      "decision": "Current sum 7 is smaller than target 8; move left rightward.",
+      "why": "Keeping 1 cannot help because moving right leftward would only make the sum smaller or equal."
+    },
+    {
+      "step": 3,
+      "action": "Compare numbers[1] + numbers[3] = 2 + 6.",
+      "state": {
+        "left": 1,
+        "right": 3,
+        "pair": [2, 6],
+        "current_sum": 8,
+        "target": 8,
+        "answer": [2, 4],
+        "move": "found",
+        "highlights": [1, 3]
+      },
+      "decision": "Current sum 8 equals target 8; answer found.",
+      "why": "The values at 1-based indexes [2, 4] add up to 8."
+    }
+  ]
+}

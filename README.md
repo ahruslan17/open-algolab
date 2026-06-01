@@ -51,9 +51,10 @@ topic/
 
 ## MVP Quick Start
 
-The first complete MVP module now exists:
+The first complete learning modules now exist:
 
 - [Sliding Window: Maximum Sum Subarray of Size K](./patterns/sliding-window/max-sum-subarray-k/)
+- [Two Pointers: Two Sum II](./patterns/two-pointers/two-sum-ii/)
 - [Introduction](./docs/introduction.md)
 - [Trace format v0.1](./docs/trace-format.md)
 - [Localization guide](./docs/localization.md)
@@ -62,13 +63,13 @@ The first complete MVP module now exists:
 Run the local static server from the repository root:
 
 ```bash
-python -m http.server 8000
+python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
 Then open:
 
 ```text
-http://localhost:8000/visualizer/
+http://127.0.0.1:8000/visualizer/
 ```
 
 The visualizer runs fully in the browser. There is no backend, account system, or SaaS dependency.
@@ -79,8 +80,8 @@ It currently supports English and Russian via dependency-free locale files.
 
 ## Initial Roadmap
 
-- Two pointers
 - Sliding window
+- Two pointers
 - Binary search
 - Prefix sums
 - Stacks and monotonic stacks
@@ -114,6 +115,6 @@ Please keep explanations beginner-friendly and avoid unnecessary abstractions.
 
 ## Status
 
-OpenAlgoLab has its first complete MVP module: Sliding Window / Maximum Sum Subarray of Size K.
+OpenAlgoLab has two complete MVP modules: Sliding Window / Maximum Sum Subarray of Size K and Two Pointers / Two Sum II.
 
-The next milestone is to use this module as the template for additional algorithm patterns and renderers.
+The next milestone is to use these modules as templates for additional algorithm patterns and to reduce duplication in trace and lesson rendering.
