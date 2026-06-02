@@ -166,6 +166,22 @@ Windows PowerShell fallback:
 py -3 -m http.server 8000 --bind 127.0.0.1
 ```
 
+## Validation
+
+Before changing modules, traces, implementations, or localized trace text, run:
+
+```bash
+python3 scripts/validate_modules.py
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 scripts/validate_modules.py
+```
+
+The validator checks `visualizer/modules.json`, linked `trace.json` files, Python/C++ implementation file paths, supported visualizer types, required trace fields, step state shape, and EN/RU localized trace step counts.
+
 ## What A Module Contains
 
 Each algorithm module is designed as a small learning package:
