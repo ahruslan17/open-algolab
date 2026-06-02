@@ -455,6 +455,14 @@ window.OPENALGOLAB_LOCALES.en = {
           ]
         },
         {
+          title: "Support the project",
+          paragraphs: [
+            "OpenAlgoLab is free and open-source. If the project helps you learn algorithms or prepare for interviews, you can support Ruslan and future development.",
+            "Boosty: https://boosty.to/ahruslan17",
+            "TRON TRC20: TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+          ]
+        },
+        {
           title: "Project principles",
           bullets: [
             "Free and open-source by default.",

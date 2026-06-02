@@ -455,6 +455,14 @@ window.OPENALGOLAB_LOCALES.ru = {
           ]
         },
         {
+          title: "Как поддержать проект?",
+          paragraphs: [
+            "OpenAlgoLab остаётся бесплатным и open-source. Если проект помогает тебе учить алгоритмы или готовиться к собеседованиям, можно поддержать Руслана и дальнейшую разработку.",
+            "Boosty: https://boosty.to/ahruslan17",
+            "TRON TRC20: TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+          ]
+        },
+        {
           title: "Принципы проекта",
           bullets: [
             "Бесплатно и open-source по умолчанию.",
