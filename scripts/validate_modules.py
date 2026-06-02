@@ -93,6 +93,8 @@ def validate_trace(module: dict[str, Any], module_id: str, errors: list[str]) ->
         errors.append(f"module '{module_id}' trace path does not exist: {trace_path_value}")
         return None
 
+    validate_trace_generator(trace_path, module_id, errors)
+
     trace = load_json(trace_path, errors)
     if not isinstance(trace, dict):
         errors.append(f"module '{module_id}' trace must be a JSON object: {trace_path_value}")
@@ -117,6 +119,17 @@ def validate_trace(module: dict[str, Any], module_id: str, errors: list[str]) ->
         validate_trace_step(module_id, visual_type, expected_step, step, errors)
 
     return trace
+
+
+def validate_trace_generator(trace_path: Path, module_id: str, errors: list[str]) -> None:
+    trace_generator_path = trace_path.parent / "trace_generator.py"
+
+    if not trace_generator_path.exists():
+        errors.append(f"module '{module_id}' is missing trace_generator.py next to trace.json")
+        return
+
+    if not trace_generator_path.read_text(encoding="utf-8").strip():
+        errors.append(f"module '{module_id}' trace_generator.py is empty")
 
 
 def validate_trace_step(

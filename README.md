@@ -180,7 +180,7 @@ Windows PowerShell:
 py -3 scripts/validate_modules.py
 ```
 
-The validator checks `visualizer/modules.json`, linked `trace.json` files, Python/C++ implementation file paths, supported visualizer types, required trace fields, step state shape, and EN/RU localized trace step counts.
+The validator checks `visualizer/modules.json`, linked `trace.json` files, `trace_generator.py` files, Python/C++ implementation file paths, supported visualizer types, required trace fields, step state shape, and EN/RU localized trace step counts.
 
 ## What A Module Contains
 
@@ -192,10 +192,12 @@ topic/
   intuition.md           # The core idea in plain language
   trace.md               # GitHub-readable step-by-step trace
   trace.json             # Source-of-truth trace data
+  trace_generator.py      # Tooling to regenerate trace.json
   common-mistakes.md     # Frequent bugs and wrong approaches
   problems.md            # Practice problems and variations
   implementations/
-    python.py            # Reference implementation and trace generator
+    python.py            # Clean reference implementation
+    cpp.cpp              # Clean reference implementation
 ```
 
 Every complete module should answer:
