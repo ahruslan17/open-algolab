@@ -33,6 +33,7 @@ const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
 let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
 let currentTheme = localStorage.getItem("openalgolab-theme") || "light";
+let currentCodeLanguage = localStorage.getItem("openalgolab-code-language") || "python";
 let currentStepIndex = 0;
 let isLanguageMenuOpen = false;
 
@@ -246,11 +247,7 @@ function renderLessonSections(copy) {
       ${recognition.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
     </section>
 
-    <section class="lesson-section code-panel">
-      <h2>${chapter.code.title}</h2>
-      <p>${chapter.code.intro}</p>
-      <pre><code>${chapter.code.lines.map(escapeHtml).join("\n")}</code></pre>
-    </section>
+    ${renderCodePanel(chapter.code)}
 
     <section class="lesson-section insight-panel">
       <h2>${chapter.whatToNotice.title}</h2>
@@ -289,6 +286,50 @@ function renderLessonSections(copy) {
       <strong>${chapter.remember.title}</strong>
       <p>${chapter.remember.text}</p>
     </div>
+  `;
+}
+
+function getCodeImplementations(code) {
+  if (code.implementations) return code.implementations;
+  return [
+    {
+      id: "python",
+      label: "Python",
+      lines: code.lines || []
+    }
+  ];
+}
+
+function renderCodePanel(code) {
+  const implementations = getCodeImplementations(code);
+
+  if (!implementations.some((implementation) => implementation.id === currentCodeLanguage)) {
+    currentCodeLanguage = implementations[0].id;
+  }
+
+  const activeImplementation = implementations.find((implementation) => implementation.id === currentCodeLanguage) || implementations[0];
+
+  return `
+    <section class="lesson-section code-panel">
+      <div class="code-panel-header">
+        <div>
+          <h2>${code.title}</h2>
+          <p>${code.intro}</p>
+        </div>
+        <div class="code-language-tabs" aria-label="Reference implementation language">
+          ${implementations
+            .map(
+              (implementation) => `
+                <button class="code-language-tab ${implementation.id === activeImplementation.id ? "active" : ""}" type="button" data-code-language="${implementation.id}" aria-pressed="${implementation.id === activeImplementation.id}">
+                  ${implementation.label}
+                </button>
+              `
+            )
+            .join("")}
+        </div>
+      </div>
+      <pre><code>${activeImplementation.lines.map(escapeHtml).join("\n")}</code></pre>
+    </section>
   `;
 }
 
@@ -348,7 +389,14 @@ function renderStaticText(copy) {
   setText(elements.reset, copy.lab.controls.reset);
   renderNavigation(copy);
   renderLessonSections(copy);
+  bindCodeLanguageTabs();
   elements.labCard.hidden = !chapter.hasTrace;
+}
+
+function bindCodeLanguageTabs() {
+  document.querySelectorAll("[data-code-language]").forEach((button) => {
+    button.addEventListener("click", () => setCodeLanguage(button.dataset.codeLanguage));
+  });
 }
 
 function renderProgress(copy) {
@@ -491,6 +539,12 @@ function setLanguage(language) {
   localStorage.setItem("openalgolab-language", language);
   renderStaticText(t());
   render();
+}
+
+function setCodeLanguage(language) {
+  currentCodeLanguage = language;
+  localStorage.setItem("openalgolab-code-language", language);
+  renderStaticText(t());
 }
 
 function toggleLanguageMenu() {

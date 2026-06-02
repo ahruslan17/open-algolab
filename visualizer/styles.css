@@ -542,6 +542,49 @@ h2 {
   text-transform: uppercase;
 }
 
+.code-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.code-panel-header h2,
+.code-panel-header p {
+  margin: 0;
+}
+
+.code-panel-header p {
+  margin-top: 12px;
+}
+
+.code-language-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.code-language-tab {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--muted);
+  background: var(--panel-strong);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.code-language-tab:hover,
+.code-language-tab:focus-visible,
+.code-language-tab.active {
+  color: var(--primary-dark);
+  background: var(--primary-soft);
+  outline: none;
+}
+
 .code-panel pre {
   overflow-x: auto;
   margin: 16px 0 0;
@@ -1180,6 +1223,14 @@ h2 {
 
   .concept-strip {
     grid-template-columns: 1fr;
+  }
+
+  .code-panel-header {
+    flex-direction: column;
+  }
+
+  .code-language-tabs {
+    justify-content: flex-start;
   }
 
   .concept-strip .arrow {
