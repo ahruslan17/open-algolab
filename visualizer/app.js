@@ -594,7 +594,7 @@ function renderGenericSection(section) {
     ? `<ul class="lesson-list">${section.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}</ul>`
     : "";
   const links = section.links
-    ? `<div class="support-link-grid">${section.links.map((link) => `<a class="support-link-card" href="${link.url}" target="_blank" rel="noreferrer"><strong>${link.label}</strong><span>${link.detail}</span></a>`).join("")}</div>`
+    ? `<div class="support-link-grid">${section.links.map(renderSupportLink).join("")}</div>`
     : "";
   return `
     <section class="lesson-section ${section.links ? "support-section" : ""}">
@@ -604,6 +604,63 @@ function renderGenericSection(section) {
       ${links}
     </section>
   `;
+}
+
+function renderSupportLink(link) {
+  if (link.copyValue) {
+    return `
+      <button class="support-link-card support-copy-card" type="button" data-copy-value="${link.copyValue}" data-copy-label="${link.copyLabel}" data-copied-label="${link.copiedLabel}">
+        <strong>${link.label}</strong>
+        <span>${link.detail}</span>
+        <small>${link.copyLabel}</small>
+      </button>
+    `;
+  }
+
+  return `
+    <a class="support-link-card" href="${link.url}" target="_blank" rel="noreferrer">
+      <strong>${link.label}</strong>
+      <span>${link.detail}</span>
+      <small>${link.url}</small>
+    </a>
+  `;
+}
+
+function bindSupportCopyButtons() {
+  document.querySelectorAll("[data-copy-value]").forEach((button) => {
+    button.addEventListener("click", () => copySupportValue(button));
+  });
+}
+
+function copySupportValue(button) {
+  const value = button.dataset.copyValue;
+  const label = button.dataset.copyLabel;
+  const copiedLabel = button.dataset.copiedLabel;
+  const status = button.querySelector("small");
+
+  copyText(value).then(() => {
+    status.textContent = copiedLabel;
+    window.setTimeout(() => {
+      status.textContent = label;
+    }, 1800);
+  });
+}
+
+function copyText(value) {
+  if (navigator.clipboard?.writeText) {
+    return navigator.clipboard.writeText(value);
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = value;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+  return Promise.resolve();
 }
 
 function getCurrentChapter(copy) {
@@ -654,6 +711,7 @@ function renderStaticText(copy) {
   setText(elements.reset, copy.lab.controls.reset);
   renderNavigation(copy);
   renderLessonSections(copy);
+  bindSupportCopyButtons();
   bindCodeLanguageTabs();
   if (chapter.code) loadActiveImplementationCode(chapter.code);
   elements.labCard.hidden = !chapter.hasTrace;

@@ -462,13 +462,15 @@ window.OPENALGOLAB_LOCALES.en = {
           links: [
             {
               label: "Support on Boosty",
-              detail: "Monthly or one-time support",
+              detail: "boosty.to/ahruslan17",
               url: "https://boosty.to/ahruslan17"
             },
             {
-              label: "TRON TRC20",
+              label: "USDT via Tron (TRC20)",
               detail: "TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF",
-              url: "https://tronscan.org/#/address/TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+              copyLabel: "Copy wallet address",
+              copiedLabel: "Copied",
+              copyValue: "TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
             }
           ]
         },

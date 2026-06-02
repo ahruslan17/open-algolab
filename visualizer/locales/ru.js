@@ -462,13 +462,15 @@ window.OPENALGOLAB_LOCALES.ru = {
           links: [
             {
               label: "Поддержать на Boosty",
-              detail: "Разовая или регулярная поддержка",
+              detail: "boosty.to/ahruslan17",
               url: "https://boosty.to/ahruslan17"
             },
             {
-              label: "TRON TRC20",
+              label: "USDT через Tron (TRC20)",
               detail: "TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF",
-              url: "https://tronscan.org/#/address/TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+              copyLabel: "Скопировать адрес кошелька",
+              copiedLabel: "Скопировано",
+              copyValue: "TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
             }
           ]
         },
