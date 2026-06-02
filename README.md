@@ -110,7 +110,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 OpenAlgoLab is free and open-source.
 
 - Boosty: [boosty.to/ahruslan17](https://boosty.to/ahruslan17)
-- TRON TRC20: `TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF`
+- USDT via Tron (TRC20): `TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF`
 
 ## License
 
