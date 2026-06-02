@@ -457,9 +457,19 @@ window.OPENALGOLAB_LOCALES.en = {
         {
           title: "Support the project",
           paragraphs: [
-            "OpenAlgoLab is free and open-source. If the project helps you learn algorithms or prepare for interviews, you can support Ruslan and future development.",
-            "Boosty: https://boosty.to/ahruslan17",
-            "TRON TRC20: TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+            "OpenAlgoLab is free and open-source. If the project helps you learn algorithms or prepare for interviews, you can support Ruslan and future development."
+          ],
+          links: [
+            {
+              label: "Support on Boosty",
+              detail: "Monthly or one-time support",
+              url: "https://boosty.to/ahruslan17"
+            },
+            {
+              label: "TRON TRC20",
+              detail: "TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF",
+              url: "https://tronscan.org/#/address/TY48pFYWc5V82VpNb53ch8Uju5LTnyY5nF"
+            }
           ]
         },
         {

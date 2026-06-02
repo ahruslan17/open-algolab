@@ -593,11 +593,15 @@ function renderGenericSection(section) {
   const bullets = section.bullets
     ? `<ul class="lesson-list">${section.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}</ul>`
     : "";
+  const links = section.links
+    ? `<div class="support-link-grid">${section.links.map((link) => `<a class="support-link-card" href="${link.url}" target="_blank" rel="noreferrer"><strong>${link.label}</strong><span>${link.detail}</span></a>`).join("")}</div>`
+    : "";
   return `
-    <section class="lesson-section">
+    <section class="lesson-section ${section.links ? "support-section" : ""}">
       <h2>${section.title}</h2>
       ${paragraphs}
       ${bullets}
+      ${links}
     </section>
   `;
 }

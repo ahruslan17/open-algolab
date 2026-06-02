@@ -562,6 +562,61 @@ h2 {
   letter-spacing: -0.015em;
 }
 
+.support-section {
+  border: 1px solid rgba(36, 87, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: clamp(18px, 2.2vw, 26px);
+  background: linear-gradient(135deg, rgba(219, 229, 255, 0.72), rgba(220, 252, 231, 0.7));
+}
+
+:root[data-theme="dark"] .support-section {
+  background: linear-gradient(135deg, rgba(122, 162, 255, 0.14), rgba(74, 222, 128, 0.12));
+}
+
+.support-link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.support-link-card {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid rgba(36, 87, 255, 0.22);
+  border-radius: 18px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 12px 30px rgba(34, 53, 108, 0.1);
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.support-link-card:hover,
+.support-link-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(36, 87, 255, 0.42);
+  box-shadow: 0 18px 38px rgba(34, 53, 108, 0.16);
+  outline: none;
+}
+
+:root[data-theme="dark"] .support-link-card {
+  background: rgba(18, 28, 48, 0.78);
+}
+
+.support-link-card strong {
+  color: var(--primary-dark);
+  font-size: 1rem;
+}
+
+.support-link-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .example-box {
   display: grid;
   gap: 8px;
@@ -1631,6 +1686,10 @@ h2 {
 
   .practice-problem-notes {
     grid-column: 1 / -1;
+  }
+
+  .support-link-grid {
+    grid-template-columns: 1fr;
   }
 
   .concept-strip .arrow {
