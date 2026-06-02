@@ -45,7 +45,7 @@ Each finished topic explains what the algorithm is doing, why each movement is s
 | Area | Technology |
 |---|---|
 | Visualizer | HTML, CSS, vanilla JavaScript |
-| Content | Markdown, JSON traces |
+| Content | Markdown, JSON traces, visualizer module registry |
 | Implementations | Python and C++ reference solutions |
 | Runtime | Static browser app, local HTTP server |
 | Localization | Dependency-free EN/RU locale files |
@@ -217,6 +217,7 @@ open-algolab/
     sliding-window/
     two-pointers/
   visualizer/            # Dependency-free browser visualizer
+    modules.json         # Visualizer registry for traces and source implementations
   scripts/               # Local development helpers
   .github/FUNDING.yml
   LICENSE

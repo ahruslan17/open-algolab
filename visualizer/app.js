@@ -30,6 +30,8 @@ const traceDataByChapter = {
 
 const locales = window.OPENALGOLAB_LOCALES || {};
 const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
+let moduleRegistry = {};
+const implementationCodeCache = new Map();
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
 let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
 let currentTheme = localStorage.getItem("openalgolab-theme") || "light";
@@ -103,8 +105,34 @@ function getTraceData() {
   return traceDataByChapter[currentChapterId];
 }
 
+function getCurrentModule() {
+  return moduleRegistry[currentChapterId];
+}
+
 function setText(element, value) {
   element.textContent = value;
+}
+
+async function loadModuleRegistry() {
+  try {
+    const response = await fetch("./modules.json");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    moduleRegistry = Object.fromEntries(data.modules.map((module) => [module.id, module]));
+  } catch (error) {
+    console.warn("Could not load visualizer/modules.json", error);
+    moduleRegistry = {};
+  }
+}
+
+async function initialize() {
+  await loadModuleRegistry();
+  applyTheme();
+  renderStaticText(t());
+  render();
 }
 
 function applyTheme() {
@@ -290,11 +318,20 @@ function renderLessonSections(copy) {
 }
 
 function getCodeImplementations(code) {
-  if (code.implementations) return code.implementations;
+  const module = getCurrentModule();
+
+  if (code.implementations) {
+    return code.implementations.map((implementation) => ({
+      ...implementation,
+      source: implementation.source || module?.implementations?.[implementation.id]
+    }));
+  }
+
   return [
     {
       id: "python",
       label: "Python",
+      source: module?.implementations?.python,
       lines: code.lines || []
     }
   ];
@@ -308,6 +345,7 @@ function renderCodePanel(code) {
   }
 
   const activeImplementation = implementations.find((implementation) => implementation.id === currentCodeLanguage) || implementations[0];
+  const codeText = getImplementationCode(activeImplementation);
 
   return `
     <section class="lesson-section code-panel">
@@ -328,9 +366,48 @@ function renderCodePanel(code) {
             .join("")}
         </div>
       </div>
-      <pre><code>${activeImplementation.lines.map(escapeHtml).join("\n")}</code></pre>
+      <pre><code>${escapeHtml(codeText)}</code></pre>
     </section>
   `;
+}
+
+function getImplementationCode(implementation) {
+  if (implementation.source) {
+    if (implementationCodeCache.has(implementation.source)) {
+      return implementationCodeCache.get(implementation.source);
+    }
+    return "Loading implementation source...";
+  }
+
+  if (implementation.lines) return implementation.lines.join("\n");
+  return "Implementation source is unavailable. Run the visualizer through the local server.";
+}
+
+function loadActiveImplementationCode(code) {
+  const activeImplementation = getCodeImplementations(code).find((implementation) => implementation.id === currentCodeLanguage);
+
+  if (!activeImplementation?.source || implementationCodeCache.has(activeImplementation.source)) return;
+
+  fetch(activeImplementation.source)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.text();
+    })
+    .then((source) => {
+      implementationCodeCache.set(activeImplementation.source, source.trimEnd());
+      if (getCurrentModule()?.implementations?.[currentCodeLanguage] === activeImplementation.source) {
+        renderStaticText(t());
+      }
+    })
+    .catch((error) => {
+      implementationCodeCache.set(
+        activeImplementation.source,
+        `Could not load implementation source: ${error.message}\nRun the visualizer through the local server and check visualizer/modules.json.`
+      );
+      renderStaticText(t());
+    });
 }
 
 function escapeHtml(value) {
@@ -390,6 +467,7 @@ function renderStaticText(copy) {
   renderNavigation(copy);
   renderLessonSections(copy);
   bindCodeLanguageTabs();
+  if (chapter.code) loadActiveImplementationCode(chapter.code);
   elements.labCard.hidden = !chapter.hasTrace;
 }
 
@@ -607,6 +685,4 @@ elements.reset.addEventListener("click", () => {
   render();
 });
 
-applyTheme();
-renderStaticText(t());
-render();
+initialize();

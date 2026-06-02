@@ -87,53 +87,11 @@ window.OPENALGOLAB_LOCALES.ru = {
       implementations: [
         {
           id: "python",
-          label: "Python",
-          lines: [
-            "def max_sum_subarray_k(nums, k):",
-            "    if k <= 0 or k > len(nums):",
-            "        raise ValueError(\"invalid window size\")",
-            "",
-            "    window_sum = 0",
-            "    best = None",
-            "    left = 0",
-            "",
-            "    for right, value in enumerate(nums):",
-            "        window_sum += value",
-            "",
-            "        if right - left + 1 == k:",
-            "            best = window_sum if best is None else max(best, window_sum)",
-            "            window_sum -= nums[left]",
-            "            left += 1",
-            "",
-            "    return best"
-          ]
+          label: "Python"
         },
         {
           id: "cpp",
-          label: "C++",
-          lines: [
-            "int maxSumSubarrayK(const vector<int>& nums, int k) {",
-            "    if (k <= 0 || k > static_cast<int>(nums.size())) {",
-            "        throw invalid_argument(\"invalid window size\");",
-            "    }",
-            "",
-            "    int windowSum = 0;",
-            "    optional<int> best;",
-            "    int left = 0;",
-            "",
-            "    for (int right = 0; right < static_cast<int>(nums.size()); ++right) {",
-            "        windowSum += nums[right];",
-            "",
-            "        if (right - left + 1 == k) {",
-            "            best = best ? max(*best, windowSum) : windowSum;",
-            "            windowSum -= nums[left];",
-            "            ++left;",
-            "        }",
-            "    }",
-            "",
-            "    return *best;",
-            "}"
-          ]
+          label: "C++"
         }
       ]
     },
@@ -263,51 +221,11 @@ window.OPENALGOLAB_LOCALES.ru = {
       implementations: [
         {
           id: "python",
-          label: "Python",
-          lines: [
-            "def two_sum_ii(numbers, target):",
-            "    left = 0",
-            "    right = len(numbers) - 1",
-            "",
-            "    while left < right:",
-            "        current_sum = numbers[left] + numbers[right]",
-            "",
-            "        if current_sum == target:",
-            "            return [left + 1, right + 1]",
-            "",
-            "        if current_sum < target:",
-            "            left += 1",
-            "        else:",
-            "            right -= 1",
-            "",
-            "    raise ValueError(\"no pair adds up to target\")"
-          ]
+          label: "Python"
         },
         {
           id: "cpp",
-          label: "C++",
-          lines: [
-            "vector<int> twoSumII(const vector<int>& numbers, int target) {",
-            "    int left = 0;",
-            "    int right = static_cast<int>(numbers.size()) - 1;",
-            "",
-            "    while (left < right) {",
-            "        int currentSum = numbers[left] + numbers[right];",
-            "",
-            "        if (currentSum == target) {",
-            "            return {left + 1, right + 1};",
-            "        }",
-            "",
-            "        if (currentSum < target) {",
-            "            ++left;",
-            "        } else {",
-            "            --right;",
-            "        }",
-            "    }",
-            "",
-            "    throw invalid_argument(\"no pair adds up to target\");",
-            "}"
-          ]
+          label: "C++"
         }
       ]
     },

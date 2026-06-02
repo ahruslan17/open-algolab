@@ -1,0 +1,20 @@
+{
+  "modules": [
+    {
+      "id": "sliding-window",
+      "trace": "../patterns/sliding-window/max-sum-subarray-k/trace.json",
+      "implementations": {
+        "python": "../patterns/sliding-window/max-sum-subarray-k/implementations/python.py",
+        "cpp": "../patterns/sliding-window/max-sum-subarray-k/implementations/cpp.cpp"
+      }
+    },
+    {
+      "id": "two-pointers",
+      "trace": "../patterns/two-pointers/two-sum-ii/trace.json",
+      "implementations": {
+        "python": "../patterns/two-pointers/two-sum-ii/implementations/python.py",
+        "cpp": "../patterns/two-pointers/two-sum-ii/implementations/cpp.cpp"
+      }
+    }
+  ]
+}
