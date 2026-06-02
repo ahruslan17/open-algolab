@@ -374,6 +374,8 @@ window.OPENALGOLAB_LOCALES.ru = {
       next: "Вперёд",
       reset: "Сначала"
     },
+    loadingTrace: "Загружаем trace data...",
+    traceLoadError: "Не удалось загрузить trace.json. Запусти visualizer через локальный сервер и проверь visualizer/modules.json",
     indexLabel: "индекс",
     progressAria: "Перейти к шагу"
   },

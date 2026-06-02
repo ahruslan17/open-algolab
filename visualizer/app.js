@@ -1,37 +1,10 @@
-const traceDataByChapter = {
-  "sliding-window": {
-    version: "0.1",
-    id: "sliding-window-max-sum-subarray-k",
-    visualType: "array-window",
-    input: { nums: [2, 1, 5, 1, 3, 2], k: 3 },
-    answer: 9,
-    steps: [
-      { step: 1, state: { left: 0, right: 0, windowStart: 0, windowEnd: 0, window: [2], window_sum: 2, best: null, removed: null, highlights: [0] } },
-      { step: 2, state: { left: 0, right: 1, windowStart: 0, windowEnd: 1, window: [2, 1], window_sum: 3, best: null, removed: null, highlights: [1] } },
-      { step: 3, state: { left: 0, right: 2, windowStart: 0, windowEnd: 2, window: [2, 1, 5], window_sum: 8, best: 8, removed: 2, highlights: [0, 1, 2] } },
-      { step: 4, state: { left: 1, right: 3, windowStart: 1, windowEnd: 3, window: [1, 5, 1], window_sum: 7, best: 8, removed: 1, highlights: [1, 2, 3] } },
-      { step: 5, state: { left: 2, right: 4, windowStart: 2, windowEnd: 4, window: [5, 1, 3], window_sum: 9, best: 9, removed: 5, highlights: [2, 3, 4] } },
-      { step: 6, state: { left: 3, right: 5, windowStart: 3, windowEnd: 5, window: [1, 3, 2], window_sum: 6, best: 9, removed: 1, highlights: [3, 4, 5] } }
-    ]
-  },
-  "two-pointers": {
-    version: "0.1",
-    id: "two-pointers-two-sum-ii",
-    visualType: "two-pointers",
-    input: { numbers: [1, 2, 4, 6, 10], target: 8 },
-    answer: [2, 4],
-    steps: [
-      { step: 1, state: { left: 0, right: 4, pair: [1, 10], current_sum: 11, target: 8, answer: null, move: "right", highlights: [0, 4] } },
-      { step: 2, state: { left: 0, right: 3, pair: [1, 6], current_sum: 7, target: 8, answer: null, move: "left", highlights: [0, 3] } },
-      { step: 3, state: { left: 1, right: 3, pair: [2, 6], current_sum: 8, target: 8, answer: [2, 4], move: "found", highlights: [1, 3] } }
-    ]
-  }
-};
-
 const locales = window.OPENALGOLAB_LOCALES || {};
 const defaultLanguage = locales.en ? "en" : Object.keys(locales)[0];
 let moduleRegistry = {};
 const implementationCodeCache = new Map();
+const traceDataCache = new Map();
+const traceLoadState = new Map();
+const traceErrorCache = new Map();
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
 let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
 let currentTheme = localStorage.getItem("openalgolab-theme") || "light";
@@ -102,11 +75,16 @@ function formatWindow(windowValues) {
 }
 
 function getTraceData() {
-  return traceDataByChapter[currentChapterId];
+  const tracePath = getCurrentModule()?.trace;
+  return tracePath ? traceDataCache.get(tracePath) : null;
 }
 
 function getCurrentModule() {
   return moduleRegistry[currentChapterId];
+}
+
+function getCurrentTracePath() {
+  return getCurrentModule()?.trace;
 }
 
 function setText(element, value) {
@@ -410,6 +388,38 @@ function loadActiveImplementationCode(code) {
     });
 }
 
+function loadCurrentTraceData() {
+  const tracePath = getCurrentTracePath();
+
+  if (!tracePath || traceDataCache.has(tracePath) || traceLoadState.has(tracePath)) return;
+
+  traceLoadState.set(tracePath, true);
+  traceErrorCache.delete(tracePath);
+
+  fetch(tracePath)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((traceData) => {
+      traceDataCache.set(tracePath, traceData);
+      traceLoadState.delete(tracePath);
+      if (getCurrentTracePath() === tracePath) {
+        currentStepIndex = Math.min(currentStepIndex, traceData.steps.length - 1);
+        render();
+      }
+    })
+    .catch((error) => {
+      traceLoadState.delete(tracePath);
+      traceErrorCache.set(tracePath, error.message);
+      if (getCurrentTracePath() === tracePath) {
+        render();
+      }
+    });
+}
+
 function escapeHtml(value) {
   return value
     .replaceAll("&", "&amp;")
@@ -577,18 +587,47 @@ function renderState(step) {
     .join("");
 }
 
+function renderTracePlaceholder(copy, message) {
+  elements.labCard.classList.remove("trace-array-window", "trace-two-pointers");
+  setText(elements.pattern, message);
+  setText(elements.counter, "—");
+  setText(elements.windowValues, "—");
+  setText(elements.bestAnswer, "—");
+  setText(elements.action, message);
+  setText(elements.decision, "—");
+  setText(elements.why, "—");
+  elements.progress.innerHTML = "";
+  elements.array.innerHTML = "";
+  elements.state.innerHTML = "";
+  elements.prev.disabled = true;
+  elements.next.disabled = true;
+  elements.reset.disabled = true;
+  elements.labCard.hidden = false;
+}
+
 function render() {
   const copy = t();
   const chapter = getCurrentChapter(copy);
   const traceData = getTraceData();
 
-  if (!chapter.hasTrace || !traceData) {
-    renderStaticText(copy);
+  if (!chapter.hasTrace) {
+    elements.labCard.hidden = true;
     return;
   }
 
+  if (!traceData) {
+    const tracePath = getCurrentTracePath();
+    const error = tracePath ? traceErrorCache.get(tracePath) : null;
+    const message = error ? `${copy.lab.traceLoadError}: ${error}` : copy.lab.loadingTrace;
+    renderTracePlaceholder(copy, message);
+    loadCurrentTraceData();
+    return;
+  }
+
+  elements.reset.disabled = false;
+
   const step = traceData.steps[currentStepIndex];
-  const localizedStep = chapter.trace.steps[currentStepIndex];
+  const localizedStep = chapter.trace.steps[currentStepIndex] || step;
   const state = step.state;
 
   elements.labCard.classList.remove("trace-array-window", "trace-two-pointers");

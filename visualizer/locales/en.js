@@ -374,6 +374,8 @@ window.OPENALGOLAB_LOCALES.en = {
       next: "Next",
       reset: "Reset"
     },
+    loadingTrace: "Loading trace data...",
+    traceLoadError: "Could not load trace.json. Run the visualizer through the local server and check visualizer/modules.json",
     indexLabel: "index",
     progressAria: "Go to step"
   },
