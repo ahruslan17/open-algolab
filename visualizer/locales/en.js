@@ -7,6 +7,10 @@ window.OPENALGOLAB_LOCALES.en = {
   },
   sidebar: {
     brandSubtitle: "Local visual course",
+    modes: [
+      { id: "core", label: "Core Patterns" },
+      { id: "practice", label: "Practice" }
+    ],
     navLabel: "Core Patterns",
     items: [
       { id: "intro", number: "00", title: "Introduction", subtitle: "What OpenAlgoLab is", locked: false },
@@ -16,6 +20,26 @@ window.OPENALGOLAB_LOCALES.en = {
     ],
     noteTitle: "How to study this",
     noteText: "Do not memorize the template. First understand what the window represents, then play the trace step by step."
+  },
+  practiceCatalog: {
+    navLabel: "Practice",
+    chapterSubtitle: "Practice set",
+    eyebrow: "Practice · Curated problem list",
+    title: "Practice by Pattern",
+    hero: "Use this catalog after the core explanations. Pick a task, name the pattern signal, then solve it on the linked platform when available.",
+    kicker: "Problem catalog",
+    sectionEyebrow: "Pattern practice",
+    tasksEyebrow: "Task list",
+    tasksTitle: "Practice tasks",
+    problemCountLabel: "practice tasks",
+    statsAria: "Practice catalog stats",
+    labels: {
+      platform: "Platform",
+      difficulty: "Difficulty",
+      group: "Group",
+      signal: "Pattern signal:",
+      focus: "Focus:"
+    }
   },
   lesson: {
     eyebrow: "Chapter 01 · Fixed-size Sliding Window",
@@ -125,21 +149,67 @@ window.OPENALGOLAB_LOCALES.en = {
       ]
     },
     practice: {
-      title: "Practice next",
-      intro: "Use the same shape with different state.",
-      items: [
-        "Average of Subarrays of Size K",
-        "Maximum Number of Vowels in a Substring of Given Length",
-        "First Negative Number in Every Window of Size K",
-        "Find All Anagrams in a String",
-        "Permutation in String"
+      title: "Practice",
+      intro: "OpenAlgoLab does not host submissions. Use this section to understand the pattern, then solve on the linked platform when available.",
+      howTitle: "How to practice this pattern",
+      howItems: [
+        "Identify what enters the window when right moves.",
+        "Identify what leaves when the window reaches size k.",
+        "Keep a small state that can be updated in O(1).",
+        "Update the answer only when the window is valid."
       ],
-      drillsTitle: "Mini drills",
-      drills: [
-        "[5], k = 1 -> 5",
-        "[1, 2, 3], k = 3 -> 6",
-        "[-5, -2, -7], k = 2 -> -7",
-        "[4, 1, 1, 9, 1], k = 2 -> 10"
+      tableHeaders: {
+        problem: "Problem",
+        platform: "Platform",
+        difficulty: "Difficulty",
+        signal: "Pattern signal",
+        focus: "Focus"
+      },
+      guidedTitle: "Guided problems",
+      guidedProblems: [
+        {
+          name: "Maximum Sum Subarray of Size K",
+          url: "../patterns/sliding-window/max-sum-subarray-k/",
+          platform: "OpenAlgoLab",
+          difficulty: "Beginner",
+          signal: "Contiguous subarray with exactly k elements.",
+          focus: "Maintain window_sum, remove the left value at the right time, and initialize best safely."
+        }
+      ],
+      practiceOnlyTitle: "More problems",
+      practiceOnlyProblems: [
+        {
+          name: "Contains Duplicate II",
+          url: "https://leetcode.com/problems/contains-duplicate-ii/",
+          platform: "LeetCode 219",
+          difficulty: "Easy",
+          signal: "Need to know whether equal values appear within a distance of k.",
+          focus: "Keep only the last k values in the window and update membership as the window moves."
+        },
+        {
+          name: "Maximum Number of Vowels in a Substring of Given Length",
+          url: "https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/",
+          platform: "LeetCode 1456",
+          difficulty: "Medium",
+          signal: "Fixed-length substring, maximize a count.",
+          focus: "Replace window_sum with vowel_count and update it when characters enter or leave."
+        },
+        {
+          name: "Find All Anagrams in a String",
+          url: "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+          platform: "LeetCode 438",
+          difficulty: "Medium",
+          signal: "Fixed-length substring plus character frequencies.",
+          focus: "Track frequency differences and record every window that matches the target counts."
+        },
+        {
+          name: "Permutation in String",
+          url: "https://leetcode.com/problems/permutation-in-string/",
+          platform: "LeetCode 567",
+          difficulty: "Medium",
+          signal: "Fixed-length substring asks whether a permutation exists.",
+          focus: "Use the same frequency-map idea as anagrams, but return as soon as a match appears."
+        }
       ]
     },
     remember: {
@@ -259,21 +329,67 @@ window.OPENALGOLAB_LOCALES.en = {
       ]
     },
     practice: {
-      title: "Practice next",
-      intro: "Use the same inward movement with different decisions.",
-      items: [
-        "Valid Palindrome",
-        "Squares of a Sorted Array",
-        "Container With Most Water",
-        "3Sum",
-        "4Sum"
+      title: "Practice",
+      intro: "OpenAlgoLab does not host submissions. Use this section to understand pointer movement, then solve on the linked platform.",
+      howTitle: "How to practice this pattern",
+      howItems: [
+        "Check whether the input is sorted or can be sorted safely.",
+        "Ask what the current comparison proves.",
+        "Move only the pointer that cannot discard a valid answer.",
+        "Watch how duplicates change the implementation."
       ],
-      drillsTitle: "Mini drills",
-      drills: [
-        "[1, 2], target = 3 -> [1, 2]",
-        "[1, 2, 4, 6, 10], target = 8 -> [2, 4]",
-        "[-3, -1, 0, 2, 4], target = 1 -> [1, 5]",
-        "[2, 2, 3, 4], target = 4 -> [1, 2]"
+      tableHeaders: {
+        problem: "Problem",
+        platform: "Platform",
+        difficulty: "Difficulty",
+        signal: "Pattern signal",
+        focus: "Focus"
+      },
+      guidedTitle: "Guided problems",
+      guidedProblems: [
+        {
+          name: "Two Sum II - Input Array Is Sorted",
+          url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+          platform: "LeetCode 167",
+          difficulty: "Medium",
+          signal: "Sorted array, find one pair with a target sum.",
+          focus: "Use the sum comparison to prove whether left or right can move safely."
+        }
+      ],
+      practiceOnlyTitle: "More problems",
+      practiceOnlyProblems: [
+        {
+          name: "Valid Palindrome",
+          url: "https://leetcode.com/problems/valid-palindrome/",
+          platform: "LeetCode 125",
+          difficulty: "Easy",
+          signal: "Compare matching characters from both ends.",
+          focus: "Move inward after each valid comparison and skip ignored characters carefully."
+        },
+        {
+          name: "Squares of a Sorted Array",
+          url: "https://leetcode.com/problems/squares-of-a-sorted-array/",
+          platform: "LeetCode 977",
+          difficulty: "Easy",
+          signal: "Sorted input, largest square may be at either end.",
+          focus: "Compare absolute values and fill the output from right to left."
+        },
+        {
+          name: "Container With Most Water",
+          url: "https://leetcode.com/problems/container-with-most-water/",
+          platform: "LeetCode 11",
+          difficulty: "Medium",
+          signal: "Two ends form a candidate, width shrinks each step.",
+          focus: "Move the pointer at the smaller height and understand why the other move cannot help."
+        },
+        {
+          name: "3Sum",
+          url: "https://leetcode.com/problems/3sum/",
+          platform: "LeetCode 15",
+          difficulty: "Medium",
+          signal: "Sort, fix one value, then find pairs in the remaining range.",
+          focus: "Avoid duplicate triplets and reuse the Two Sum II movement inside each fixed range."
+        }
       ]
     },
     remember: {

@@ -1,45 +1,30 @@
-# Related Problems And Variations
+# Practice
 
-## Same Opposite-direction Shape
+OpenAlgoLab does not host submissions or grade solutions. Use these notes to learn the pointer movement, then solve and submit on the linked platform when a link is available.
 
-- Two Sum II - Input Array Is Sorted
-- 3Sum
-- 4Sum
-- Container With Most Water
-- Valid Palindrome
-- Squares of a Sorted Array
+## How To Practice This Pattern
 
-## Suggested Practice Order
+For opposite-direction two pointers, ask:
 
-1. **Valid Palindrome**: same inward movement, but compare characters instead of sums.
-2. **Squares of a Sorted Array**: compare absolute values at both ends.
-3. **Container With Most Water**: move the pointer at the smaller height.
-4. **3Sum**: fix one value, then run Two Pointers on the remaining range.
-5. **4Sum**: extend the same idea with two fixed values.
-
-## Slight Variations
-
-- Return values instead of indexes.
-- Return 0-based indexes instead of 1-based indexes.
-- Return all pairs that sum to the target.
-- Handle duplicate pairs.
-- Return `None` when no valid pair exists.
-
-## Questions To Ask During Practice
-
-- Is the input sorted?
+- Is the input sorted, or can sorting be used safely?
 - What does the current comparison prove?
 - Which pointer can move without losing a possible answer?
-- Does the answer need values or indexes?
-- Are indexes expected to be 0-based or 1-based?
+- Does the answer need values, indexes, or all unique combinations?
+- Are duplicates important?
 
-## Mini Drills
+Start with simple inward movement, then practice problems where one or more values are fixed before running two pointers on the remaining range.
 
-Use these small inputs to test your implementation by hand:
+## Guided Problems
 
-```text
-numbers = [1, 2], target = 3 -> [1, 2]
-numbers = [1, 2, 4, 6, 10], target = 8 -> [2, 4]
-numbers = [-3, -1, 0, 2, 4], target = 1 -> [1, 5]
-numbers = [2, 2, 3, 4], target = 4 -> [1, 2]
-```
+| Problem | Platform | Difficulty | Pattern Signal | Focus |
+|---|---|---:|---|---|
+| [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) | LeetCode 167 | Medium | Sorted array, find one pair with a target sum | Use the sum comparison to prove whether `left` or `right` can move safely. |
+
+## Practice-Only Problems
+
+| Problem | Platform | Difficulty | Pattern Signal | Focus |
+|---|---|---:|---|---|
+| [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | LeetCode 125 | Easy | Compare matching characters from both ends | Move inward after each valid comparison and skip ignored characters carefully. |
+| [Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/) | LeetCode 977 | Easy | Sorted input, largest square may be at either end | Compare absolute values and fill the output from right to left. |
+| [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | LeetCode 11 | Medium | Two ends form a candidate, width shrinks each step | Move the pointer at the smaller height and understand why the other move cannot help. |
+| [3Sum](https://leetcode.com/problems/3sum/) | LeetCode 15 | Medium | Sort, fix one value, then find pairs in the remaining range | Avoid duplicate triplets and reuse the Two Sum II movement inside each fixed range. |

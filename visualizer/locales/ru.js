@@ -7,6 +7,10 @@ window.OPENALGOLAB_LOCALES.ru = {
   },
   sidebar: {
     brandSubtitle: "Локальный визуальный курс",
+    modes: [
+      { id: "core", label: "Базовые паттерны" },
+      { id: "practice", label: "Практика" }
+    ],
     navLabel: "Базовые паттерны",
     items: [
       { id: "intro", number: "00", title: "Введение", subtitle: "Что такое OpenAlgoLab", locked: false },
@@ -16,6 +20,26 @@ window.OPENALGOLAB_LOCALES.ru = {
     ],
     noteTitle: "Как проходить главу",
     noteText: "Не заучивай шаблон. Сначала пойми, что означает окно, потом пройди trace шаг за шагом."
+  },
+  practiceCatalog: {
+    navLabel: "Практика",
+    chapterSubtitle: "Набор задач",
+    eyebrow: "Практика · Подборка задач",
+    title: "Практика по паттернам",
+    hero: "Используй этот каталог после основных объяснений. Выбери задачу, назови сигнал паттерна, затем решай её на внешней платформе, если ссылка есть.",
+    kicker: "Каталог задач",
+    sectionEyebrow: "Практика паттерна",
+    tasksEyebrow: "Список задач",
+    tasksTitle: "Задачи для практики",
+    problemCountLabel: "задач для практики",
+    statsAria: "Статистика каталога практики",
+    labels: {
+      platform: "Платформа",
+      difficulty: "Сложность",
+      group: "Группа",
+      signal: "Сигнал паттерна:",
+      focus: "Фокус:"
+    }
   },
   lesson: {
     eyebrow: "Глава 01 · Скользящее окно фиксированного размера",
@@ -125,21 +149,67 @@ window.OPENALGOLAB_LOCALES.ru = {
       ]
     },
     practice: {
-      title: "Что решать дальше",
-      intro: "Используй ту же форму, но меняй состояние окна.",
-      items: [
-        "Average of Subarrays of Size K",
-        "Maximum Number of Vowels in a Substring of Given Length",
-        "First Negative Number in Every Window of Size K",
-        "Find All Anagrams in a String",
-        "Permutation in String"
+      title: "Practice",
+      intro: "OpenAlgoLab не принимает решения на проверку. Используй этот раздел, чтобы понять паттерн, а затем решай задачу на внешней платформе, если ссылка есть.",
+      howTitle: "Как практиковать этот паттерн",
+      howItems: [
+        "Определи, что входит в окно при движении right.",
+        "Определи, что выходит из окна, когда размер становится равен k.",
+        "Храни маленькое состояние, которое обновляется за O(1).",
+        "Обновляй ответ только тогда, когда окно валидно."
       ],
-      drillsTitle: "Мини-дриллы",
-      drills: [
-        "[5], k = 1 -> 5",
-        "[1, 2, 3], k = 3 -> 6",
-        "[-5, -2, -7], k = 2 -> -7",
-        "[4, 1, 1, 9, 1], k = 2 -> 10"
+      tableHeaders: {
+        problem: "Задача",
+        platform: "Платформа",
+        difficulty: "Сложность",
+        signal: "Сигнал паттерна",
+        focus: "Фокус"
+      },
+      guidedTitle: "Разобранные задачи",
+      guidedProblems: [
+        {
+          name: "Maximum Sum Subarray of Size K",
+          url: "../patterns/sliding-window/max-sum-subarray-k/",
+          platform: "OpenAlgoLab",
+          difficulty: "Beginner",
+          signal: "Непрерывный подмассив ровно из k элементов.",
+          focus: "Храни window_sum, вовремя убирай левое значение и безопасно инициализируй best."
+        }
+      ],
+      practiceOnlyTitle: "Дополнительные задачи",
+      practiceOnlyProblems: [
+        {
+          name: "Contains Duplicate II",
+          url: "https://leetcode.com/problems/contains-duplicate-ii/",
+          platform: "LeetCode 219",
+          difficulty: "Easy",
+          signal: "Нужно понять, встречаются ли одинаковые значения на расстоянии не больше k.",
+          focus: "Храни только последние k значений в окне и обновляй membership при движении окна."
+        },
+        {
+          name: "Maximum Number of Vowels in a Substring of Given Length",
+          url: "https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/",
+          platform: "LeetCode 1456",
+          difficulty: "Medium",
+          signal: "Подстрока фиксированной длины, нужно максимизировать счётчик.",
+          focus: "Замени window_sum на vowel_count и обновляй его при входе/выходе символов."
+        },
+        {
+          name: "Find All Anagrams in a String",
+          url: "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+          platform: "LeetCode 438",
+          difficulty: "Medium",
+          signal: "Подстрока фиксированной длины плюс частоты символов.",
+          focus: "Отслеживай разницу частот и записывай каждое окно, совпадающее с целевыми частотами."
+        },
+        {
+          name: "Permutation in String",
+          url: "https://leetcode.com/problems/permutation-in-string/",
+          platform: "LeetCode 567",
+          difficulty: "Medium",
+          signal: "Подстрока фиксированной длины спрашивает, существует ли перестановка.",
+          focus: "Используй идею frequency map как в anagrams, но возвращай ответ сразу при совпадении."
+        }
       ]
     },
     remember: {
@@ -259,21 +329,67 @@ window.OPENALGOLAB_LOCALES.ru = {
       ]
     },
     practice: {
-      title: "Что решать дальше",
-      intro: "Используй то же движение навстречу друг другу, но с другими решениями.",
-      items: [
-        "Valid Palindrome",
-        "Squares of a Sorted Array",
-        "Container With Most Water",
-        "3Sum",
-        "4Sum"
+      title: "Practice",
+      intro: "OpenAlgoLab не принимает решения на проверку. Используй этот раздел, чтобы понять движение указателей, а затем решай задачи на внешней платформе.",
+      howTitle: "Как практиковать этот паттерн",
+      howItems: [
+        "Проверь, отсортирован ли вход или можно ли безопасно отсортировать.",
+        "Спроси, что доказывает текущее сравнение.",
+        "Двигай только тот указатель, который не отбрасывает возможный ответ.",
+        "Следи, как дубликаты меняют реализацию."
       ],
-      drillsTitle: "Мини-дриллы",
-      drills: [
-        "[1, 2], target = 3 -> [1, 2]",
-        "[1, 2, 4, 6, 10], target = 8 -> [2, 4]",
-        "[-3, -1, 0, 2, 4], target = 1 -> [1, 5]",
-        "[2, 2, 3, 4], target = 4 -> [1, 2]"
+      tableHeaders: {
+        problem: "Задача",
+        platform: "Платформа",
+        difficulty: "Сложность",
+        signal: "Сигнал паттерна",
+        focus: "Фокус"
+      },
+      guidedTitle: "Разобранные задачи",
+      guidedProblems: [
+        {
+          name: "Two Sum II - Input Array Is Sorted",
+          url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+          platform: "LeetCode 167",
+          difficulty: "Medium",
+          signal: "Отсортированный массив, нужно найти одну пару с target sum.",
+          focus: "Используй сравнение суммы, чтобы доказать, можно ли двигать left или right."
+        }
+      ],
+      practiceOnlyTitle: "Дополнительные задачи",
+      practiceOnlyProblems: [
+        {
+          name: "Valid Palindrome",
+          url: "https://leetcode.com/problems/valid-palindrome/",
+          platform: "LeetCode 125",
+          difficulty: "Easy",
+          signal: "Сравнение символов с двух концов.",
+          focus: "Двигайся внутрь после валидного сравнения и аккуратно пропускай игнорируемые символы."
+        },
+        {
+          name: "Squares of a Sorted Array",
+          url: "https://leetcode.com/problems/squares-of-a-sorted-array/",
+          platform: "LeetCode 977",
+          difficulty: "Easy",
+          signal: "Отсортированный вход, самый большой квадрат может быть с любого края.",
+          focus: "Сравнивай абсолютные значения и заполняй результат справа налево."
+        },
+        {
+          name: "Container With Most Water",
+          url: "https://leetcode.com/problems/container-with-most-water/",
+          platform: "LeetCode 11",
+          difficulty: "Medium",
+          signal: "Два края образуют кандидата, ширина уменьшается на каждом шаге.",
+          focus: "Двигай указатель у меньшей высоты и пойми, почему другой ход не помогает."
+        },
+        {
+          name: "3Sum",
+          url: "https://leetcode.com/problems/3sum/",
+          platform: "LeetCode 15",
+          difficulty: "Medium",
+          signal: "Сортируем, фиксируем одно значение, затем ищем пару в оставшемся диапазоне.",
+          focus: "Избегай дубликатов и переиспользуй движение Two Sum II внутри каждого диапазона."
+        }
       ]
     },
     remember: {

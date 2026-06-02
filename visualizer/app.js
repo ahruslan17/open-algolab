@@ -6,7 +6,9 @@ const traceDataCache = new Map();
 const traceLoadState = new Map();
 const traceErrorCache = new Map();
 let currentLanguage = localStorage.getItem("openalgolab-language") || defaultLanguage;
+let currentView = localStorage.getItem("openalgolab-view") || "core";
 let currentChapterId = localStorage.getItem("openalgolab-chapter") || "intro";
+let currentPracticePatternId = localStorage.getItem("openalgolab-practice-pattern") || "sliding-window";
 let currentTheme = localStorage.getItem("openalgolab-theme") || "light";
 let currentCodeLanguage = localStorage.getItem("openalgolab-code-language") || "python";
 let currentStepIndex = 0;
@@ -30,6 +32,7 @@ const elements = {
   languageTriggerFlag: document.getElementById("language-trigger-flag"),
   languageTriggerLabel: document.getElementById("language-trigger-label"),
   languageMenu: document.getElementById("language-menu"),
+  navModes: document.getElementById("nav-modes"),
   navLabel: document.getElementById("nav-label"),
   navItems: document.getElementById("nav-items"),
   sidebarNoteTitle: document.getElementById("sidebar-note-title"),
@@ -38,6 +41,7 @@ const elements = {
   title: document.getElementById("title"),
   heroCopy: document.getElementById("hero-copy"),
   lessonKicker: document.getElementById("lesson-kicker"),
+  lessonLayout: document.getElementById("lesson-layout"),
   lessonSections: document.getElementById("lesson-sections"),
   labCard: document.getElementById("lab-card"),
   labEyebrow: document.getElementById("lab-eyebrow"),
@@ -129,16 +133,27 @@ function toggleTheme() {
 
 function renderNavigation(copy) {
   setText(elements.brandSubtitle, copy.sidebar.brandSubtitle);
-  setText(elements.navLabel, copy.sidebar.navLabel);
+  renderModeSwitcher(copy);
+  setText(elements.navLabel, currentView === "practice" ? copy.practiceCatalog.navLabel : copy.sidebar.navLabel);
   setText(elements.sidebarNoteTitle, copy.sidebar.noteTitle);
   setText(elements.sidebarNoteText, copy.sidebar.noteText);
 
+  if (currentView === "practice") {
+    renderPracticeNavigation(copy);
+  } else {
+    renderCoreNavigation(copy);
+  }
+
+  renderLanguageSwitcher();
+}
+
+function renderCoreNavigation(copy) {
   elements.navItems.innerHTML = copy.sidebar.items
     .map((item) => {
       const classes = ["nav-item", item.id === currentChapterId ? "active" : "", item.locked ? "locked" : ""].filter(Boolean).join(" ");
       const disabled = item.locked ? 'aria-disabled="true"' : "";
       return `
-        <button class="${classes}" type="button" data-chapter="${item.id}" ${disabled}>
+        <button class="${classes}" type="button" data-core-chapter="${item.id}" ${disabled}>
           <span>${item.number}</span>
           <strong>${item.title}</strong>
           <small>${item.subtitle}</small>
@@ -148,10 +163,40 @@ function renderNavigation(copy) {
     .join("");
 
   elements.navItems.querySelectorAll(".nav-item:not(.locked)").forEach((button) => {
-    button.addEventListener("click", () => setChapter(button.dataset.chapter));
+    button.onclick = () => setChapter(button.dataset.coreChapter);
   });
+}
 
-  renderLanguageSwitcher();
+function renderPracticeNavigation(copy) {
+  elements.navItems.innerHTML = getPracticeNavItems(copy)
+    .map((item) => {
+      const classes = ["nav-item", "practice-nav-item", item.id === currentPracticePatternId ? "active" : ""].filter(Boolean).join(" ");
+      return `
+        <button class="${classes}" type="button" data-practice-pattern="${item.id}">
+          <span>${item.number}</span>
+          <strong>${item.title}</strong>
+          <small>${item.subtitle}</small>
+        </button>
+      `;
+    })
+    .join("");
+
+  elements.navItems.querySelectorAll("[data-practice-pattern]").forEach((button) => {
+    button.onclick = () => setPracticePattern(button.dataset.practicePattern);
+  });
+}
+
+function renderModeSwitcher(copy) {
+  elements.navModes.innerHTML = copy.sidebar.modes
+    .map((mode) => {
+      const active = mode.id === currentView;
+      return `<button class="nav-mode ${active ? "active" : ""}" type="button" data-view="${mode.id}" aria-pressed="${active}">${mode.label}</button>`;
+    })
+    .join("");
+
+  elements.navModes.querySelectorAll(".nav-mode").forEach((button) => {
+    button.addEventListener("click", () => setView(button.dataset.view));
+  });
 }
 
 function getLanguageFlag(language) {
@@ -276,22 +321,138 @@ function renderLessonSections(copy) {
       </div>
     </section>
 
-    <section class="lesson-section practice-panel">
-      <h2>${chapter.practice.title}</h2>
-      <p>${chapter.practice.intro}</p>
-      <ul class="lesson-list">
-        ${chapter.practice.items.map((item) => `<li>${item}</li>`).join("")}
-      </ul>
-      <h3>${chapter.practice.drillsTitle}</h3>
-      <div class="drill-grid">
-        ${chapter.practice.drills.map((drill) => `<code>${drill}</code>`).join("")}
-      </div>
-    </section>
-
     <div class="remember-box">
       <strong>${chapter.remember.title}</strong>
       <p>${chapter.remember.text}</p>
     </div>
+  `;
+}
+
+function getPracticePatterns(copy) {
+  return [
+    {
+      id: "sliding-window",
+      title: copy.trace.pattern,
+      subtitle: copy.practiceCatalog.chapterSubtitle,
+      practice: copy.lesson.practice
+    },
+    {
+      id: "two-pointers",
+      title: copy.twoPointers.trace.pattern,
+      subtitle: copy.practiceCatalog.chapterSubtitle,
+      practice: copy.twoPointers.practice
+    }
+  ];
+}
+
+function getPracticeNavItems(copy) {
+  return getPracticePatterns(copy).map((pattern, index) => ({
+      id: pattern.id,
+      number: String(index + 1).padStart(2, "0"),
+      title: pattern.title,
+      subtitle: pattern.subtitle,
+      locked: false
+    }));
+}
+
+function getCurrentPracticePattern(copy) {
+  const patterns = getPracticePatterns(copy);
+  return patterns.find((pattern) => pattern.id === currentPracticePatternId) || patterns[0];
+}
+
+function getPracticeProblemRowsForPattern(pattern) {
+  const practice = pattern.practice;
+  const groups = [
+    [practice.guidedTitle, practice.guidedProblems || []],
+    [practice.practiceOnlyTitle, practice.practiceOnlyProblems || []]
+  ];
+
+  return groups.flatMap(([groupTitle, problems]) =>
+    problems.map((problem) => ({
+      ...problem,
+      groupTitle,
+      patternTitle: pattern.title,
+      patternSubtitle: pattern.subtitle
+    }))
+  );
+}
+
+function renderPracticeCatalog(copy) {
+  const catalog = copy.practiceCatalog;
+  const pattern = getCurrentPracticePattern(copy);
+  const rows = getPracticeProblemRowsForPattern(pattern);
+
+  elements.lessonSections.innerHTML = `
+    <section class="practice-catalog-intro">
+      <div>
+        <span class="practice-pattern">${catalog.kicker}</span>
+        <h2>${pattern.title}</h2>
+        <p>${pattern.practice.intro}</p>
+      </div>
+      <div class="practice-catalog-stats" aria-label="${catalog.statsAria}">
+        <strong>${rows.length}</strong>
+        <span>${catalog.problemCountLabel}</span>
+      </div>
+    </section>
+
+    ${renderPracticePatternSection(pattern, catalog)}
+  `;
+}
+
+function renderPracticePatternSection(pattern, catalog) {
+  const rows = getPracticeProblemRowsForPattern(pattern);
+
+  return `
+    <section class="practice-pattern-section">
+      <div class="practice-section-head">
+        <div>
+          <span class="practice-pattern">${catalog.sectionEyebrow}</span>
+          <h2>${pattern.title}</h2>
+        </div>
+        <span class="practice-count-pill">${rows.length} ${catalog.problemCountLabel}</span>
+      </div>
+
+      <div class="practice-how-card">
+        <h3>${pattern.practice.howTitle}</h3>
+        <ul class="practice-step-list">
+          ${pattern.practice.howItems.map((item, index) => `<li><span>${String(index + 1).padStart(2, "0")}</span><p>${item}</p></li>`).join("")}
+        </ul>
+      </div>
+
+      <div class="practice-block-title">
+        <span>${catalog.tasksEyebrow}</span>
+        <strong>${catalog.tasksTitle}</strong>
+      </div>
+
+      <div class="practice-problem-list">
+        ${rows.map((problem, index) => renderPracticeProblemCard(problem, catalog, index)).join("")}
+      </div>
+
+    </section>
+  `;
+}
+
+function renderPracticeProblemCard(problem, catalog, index) {
+  const title = problem.url ? `<a href="${problem.url}" target="_blank" rel="noreferrer">${problem.name}</a>` : problem.name;
+
+  return `
+    <article class="practice-problem-card">
+      <div class="practice-problem-index">${String(index + 1).padStart(2, "0")}</div>
+      <div class="practice-problem-head">
+        <div>
+          <span class="practice-pattern">${problem.groupTitle}</span>
+          <h3>${title}</h3>
+        </div>
+      </div>
+      <dl class="practice-meta">
+        <div><dt>${catalog.labels.platform}</dt><dd>${problem.platform}</dd></div>
+        <div><dt>${catalog.labels.difficulty}</dt><dd>${problem.difficulty}</dd></div>
+      </dl>
+      <div class="practice-problem-notes">
+        <p><strong>${catalog.labels.signal}</strong> ${problem.signal}</p>
+        <p><strong>${catalog.labels.focus}</strong> ${problem.focus}</p>
+      </div>
+    </article>
   `;
 }
 
@@ -460,6 +621,19 @@ function getCurrentChapter(copy) {
 function renderStaticText(copy) {
   const chapter = getCurrentChapter(copy);
   document.documentElement.lang = copy.meta.htmlLang;
+  elements.lessonLayout.classList.toggle("practice-layout", currentView === "practice");
+  if (currentView === "practice") {
+    normalizePracticePattern(copy);
+    setText(elements.lessonEyebrow, copy.practiceCatalog.eyebrow);
+    setText(elements.title, copy.practiceCatalog.title);
+    setText(elements.heroCopy, copy.practiceCatalog.hero);
+    setText(elements.lessonKicker, copy.practiceCatalog.kicker);
+    renderNavigation(copy);
+    renderPracticeCatalog(copy);
+    elements.labCard.hidden = true;
+    return;
+  }
+
   setText(elements.lessonEyebrow, chapter.eyebrow);
   setText(elements.title, chapter.title);
   setText(elements.heroCopy, chapter.hero);
@@ -610,6 +784,11 @@ function render() {
   const chapter = getCurrentChapter(copy);
   const traceData = getTraceData();
 
+  if (currentView === "practice") {
+    elements.labCard.hidden = true;
+    return;
+  }
+
   if (!chapter.hasTrace) {
     elements.labCard.hidden = true;
     return;
@@ -658,6 +837,34 @@ function setLanguage(language) {
   render();
 }
 
+function setView(view) {
+  if (!t().sidebar.modes.some((mode) => mode.id === view)) return;
+
+  currentView = view;
+  currentStepIndex = 0;
+  localStorage.setItem("openalgolab-view", view);
+  renderStaticText(t());
+  render();
+}
+
+function setPracticePattern(patternId) {
+  const copy = t();
+  if (!getPracticePatterns(copy).some((pattern) => pattern.id === patternId)) return;
+
+  currentPracticePatternId = patternId;
+  localStorage.setItem("openalgolab-practice-pattern", patternId);
+  renderStaticText(copy);
+  render();
+}
+
+function normalizePracticePattern(copy) {
+  const patterns = getPracticePatterns(copy);
+  if (patterns.some((pattern) => pattern.id === currentPracticePatternId)) return;
+
+  currentPracticePatternId = patterns[0].id;
+  localStorage.setItem("openalgolab-practice-pattern", currentPracticePatternId);
+}
+
 function setCodeLanguage(language) {
   currentCodeLanguage = language;
   localStorage.setItem("openalgolab-code-language", language);
@@ -681,7 +888,9 @@ function setChapter(chapterId) {
   if (!item || item.locked) return;
 
   currentChapterId = chapterId;
+  currentView = "core";
   currentStepIndex = 0;
+  localStorage.setItem("openalgolab-view", currentView);
   localStorage.setItem("openalgolab-chapter", chapterId);
   renderStaticText(copy);
   if (getCurrentChapter(copy).hasTrace) {

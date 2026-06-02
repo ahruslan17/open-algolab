@@ -1,48 +1,29 @@
-# Related Problems And Variations
+# Practice
 
-## Same Fixed-size Window Shape
+OpenAlgoLab does not host submissions or grade solutions. Use these notes to learn the pattern, then solve and submit on the linked platform when a link is available.
 
-- Average of Subarrays of Size K
-- Maximum Sum Subarray of Size K
-- Maximum Number of Vowels in a Substring of Given Length
-- First Negative Number in Every Window of Size K
-- Find All Anagrams in a String
-- Permutation in String
+## How To Practice This Pattern
 
-## Suggested Practice Order
+For fixed-size sliding windows, ask:
 
-1. **Average of Subarrays of Size K**: same state as this module, but divide each full-window sum by `k`.
-2. **Maximum Number of Vowels in a Substring of Given Length**: replace `window_sum` with a vowel count.
-3. **First Negative Number in Every Window of Size K**: keep a small queue of negative-number indexes.
-4. **Find All Anagrams in a String**: replace the sum with a frequency map.
-5. **Permutation in String**: same frequency-map idea, but return a boolean.
-
-## Slight Variations
-
-- Return the window itself instead of the sum.
-- Return all windows that tie for the best sum.
-- Use floating-point averages instead of integer sums.
-- Track more state, such as counts or frequencies, instead of only `window_sum`.
-- Return the start index of the best window.
-- Count how many valid windows satisfy a threshold.
-
-## Questions To Ask During Practice
-
-- Is the window size fixed or variable?
 - What enters the window when `right` moves?
-- What leaves the window when `left` moves?
+- What leaves the window when the size becomes larger than `k`?
 - Can the window state be updated in constant time?
-- When exactly is a window valid enough to update the answer?
+- When is the window valid enough to update the answer?
 
-## Mini Drills
+Start with sums or averages, then move to counts, queues, and frequency maps. If the window size can grow or shrink based on a condition, treat it as a variable-window variation.
 
-Use these small inputs to test your implementation by hand:
+## Guided Problems
 
-```text
-nums = [5], k = 1 -> 5
-nums = [1, 2, 3], k = 3 -> 6
-nums = [-5, -2, -7], k = 2 -> -7
-nums = [4, 1, 1, 9, 1], k = 2 -> 10
-```
+| Problem | Platform | Difficulty | Pattern Signal | Focus |
+|---|---|---:|---|---|
+| [Maximum Sum Subarray of Size K](./) | OpenAlgoLab | Beginner | Contiguous subarray with exactly `k` elements | Maintain `window_sum`, remove the left value at the right time, and initialize `best` safely. |
 
-If any of these fail, check update order, `best` initialization, and invalid input handling.
+## Practice-Only Problems
+
+| Problem | Platform | Difficulty | Pattern Signal | Focus |
+|---|---|---:|---|---|
+| [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/) | LeetCode 219 | Easy | Equal values may appear within distance `k` | Keep only the last `k` values in the window and update membership as the window moves. |
+| [Maximum Number of Vowels in a Substring of Given Length](https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/) | LeetCode 1456 | Medium | Fixed-length substring, maximize a count | Replace `window_sum` with `vowel_count` and update it when characters enter or leave. |
+| [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/) | LeetCode 438 | Medium | Fixed-length substring plus character frequencies | Track frequency differences and record every window that matches the target counts. |
+| [Permutation in String](https://leetcode.com/problems/permutation-in-string/) | LeetCode 567 | Medium | Fixed-length substring asks whether a permutation exists | Use the same frequency-map idea as anagrams, but return as soon as a match appears. |

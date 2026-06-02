@@ -81,6 +81,13 @@ Supporting documentation:
 - [Architecture](./docs/architecture.md)
 - [Trace format v0.1](./docs/trace-format.md)
 - [Localization guide](./docs/localization.md)
+- [Practice scope](./docs/practice-scope.md)
+
+## Practice Scope
+
+OpenAlgoLab uses practice as a curated extension of visual learning, not as an online judge. It does not run, grade, or store submissions. Practice pages point learners toward guided OpenAlgoLab modules and external platforms such as LeetCode for solving and submitting.
+
+Each practice item should have a concrete platform and URL whenever it is not an OpenAlgoLab module. See [Practice scope](./docs/practice-scope.md) for the full policy.
 
 ## Quick Start
 

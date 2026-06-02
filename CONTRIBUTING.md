@@ -82,6 +82,21 @@ Reference implementations should stay short and focused. Trace-generation toolin
 7. Run `python3 scripts/validate_modules.py`.
 8. Open the visualizer locally and test the trace step by step.
 
+## Practice Links
+
+OpenAlgoLab practice pages are curated learning paths, not exhaustive problem catalogs. Keep each list focused on problems that clearly reinforce the pattern.
+
+For each practice link, include:
+
+- Problem name.
+- Platform.
+- URL.
+- Difficulty, when known.
+- Pattern signal: the clue that suggests this pattern.
+- What to focus on while solving.
+
+Do not copy full external problem statements. Link to the original problem page and write only short learning notes, hints, or pattern-focused summaries.
+
 ## Pull Request Style
 
 - Keep one logical change per PR.
