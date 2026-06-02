@@ -12,10 +12,13 @@ Learn algorithms by watching how state changes step by step, not by memorizing t
   <img alt="No backend" src="https://img.shields.io/badge/backend-none-0f172a.svg">
   <img alt="Languages" src="https://img.shields.io/badge/i18n-EN%20%7C%20RU-f59e0b.svg">
   <img alt="Python and C++" src="https://img.shields.io/badge/implementations-Python%20%7C%20C%2B%2B-3776AB.svg">
+  <img alt="Stage" src="https://img.shields.io/badge/stage-early%20MVP-7c3aed.svg">
 </p>
 
 <p>
-  <a href="./visualizer/"><strong>Open Visualizer</strong></a>
+  <a href="https://ahruslan17.github.io/open-algolab/visualizer/"><strong>Live Demo</strong></a>
+  ·
+  <a href="./visualizer/"><strong>Local Visualizer</strong></a>
   ·
   <a href="./patterns/sliding-window/max-sum-subarray-k/">Sliding Window</a>
   ·
@@ -27,6 +30,18 @@ Learn algorithms by watching how state changes step by step, not by memorizing t
 </div>
 
 ---
+
+> OpenAlgoLab is an early-stage MVP. The first complete modules are usable now, and the structure is actively evolving toward a broader visual algorithms reference.
+
+## Live Demo
+
+The visualizer is designed to run as a static site:
+
+```text
+https://ahruslan17.github.io/open-algolab/visualizer/
+```
+
+If GitHub Pages is still deploying, use the local setup below.
 
 ## Why OpenAlgoLab Exists
 
@@ -253,7 +268,6 @@ open-algolab/
 
 Current focus:
 
-- Reduce duplication between trace data and visualizer data.
 - Improve shared lesson rendering for future chapters.
 - Add more high-signal interview patterns before broad coverage.
 - Keep the project static, simple, and easy to contribute to.
@@ -280,6 +294,8 @@ OpenAlgoLab is early-stage, so the best contributions are simple and educational
 - Improve implementations without making them clever.
 
 Please keep explanations beginner-friendly, explicit, and practical. Prefer clear educational code over compact tricks.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the module format, validation command, and contribution workflow.
 
 ## Support
 

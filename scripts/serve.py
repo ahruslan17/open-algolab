@@ -18,6 +18,16 @@ DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8000
 
 
+class NoCacheHTTPRequestHandler(SimpleHTTPRequestHandler):
+    """Static file handler with dev-friendly cache headers."""
+
+    def end_headers(self) -> None:
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Serve the OpenAlgoLab static visualizer from the repository root."
@@ -57,7 +67,7 @@ def find_repo_root() -> Path:
 def main() -> int:
     args = parse_args()
     repo_root = find_repo_root()
-    handler = functools.partial(SimpleHTTPRequestHandler, directory=str(repo_root))
+    handler = functools.partial(NoCacheHTTPRequestHandler, directory=str(repo_root))
 
     try:
         server = ThreadingHTTPServer((args.host, args.port), handler)

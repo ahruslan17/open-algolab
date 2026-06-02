@@ -93,7 +93,7 @@ function setText(element, value) {
 
 async function loadModuleRegistry() {
   try {
-    const response = await fetch("./modules.json");
+    const response = await fetch("./modules.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -366,7 +366,7 @@ function loadActiveImplementationCode(code) {
 
   if (!activeImplementation?.source || implementationCodeCache.has(activeImplementation.source)) return;
 
-  fetch(activeImplementation.source)
+  fetch(activeImplementation.source, { cache: "no-store" })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -396,7 +396,7 @@ function loadCurrentTraceData() {
   traceLoadState.set(tracePath, true);
   traceErrorCache.delete(tracePath);
 
-  fetch(tracePath)
+  fetch(tracePath, { cache: "no-store" })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
