@@ -11,7 +11,7 @@ Learn algorithms by watching how state changes step by step, not by memorizing t
   <img alt="Static app" src="https://img.shields.io/badge/app-static-16a34a.svg">
   <img alt="No backend" src="https://img.shields.io/badge/backend-none-0f172a.svg">
   <img alt="Languages" src="https://img.shields.io/badge/i18n-EN%20%7C%20RU-f59e0b.svg">
-  <img alt="Python" src="https://img.shields.io/badge/python-reference%20implementations-3776AB.svg">
+  <img alt="Python and C++" src="https://img.shields.io/badge/implementations-Python%20%7C%20C%2B%2B-3776AB.svg">
 </p>
 
 <p>
@@ -46,7 +46,7 @@ Each finished topic explains what the algorithm is doing, why each movement is s
 |---|---|
 | Visualizer | HTML, CSS, vanilla JavaScript |
 | Content | Markdown, JSON traces |
-| Implementations | Python reference solutions |
+| Implementations | Python and C++ reference solutions |
 | Runtime | Static browser app, local HTTP server |
 | Localization | Dependency-free EN/RU locale files |
 | License | MIT |
@@ -69,19 +69,102 @@ Supporting documentation:
 
 ## Quick Start
 
-Clone the repository and run a static server from the project root:
+OpenAlgoLab is a static browser app. There is no backend, build step, package install, database, or account setup.
+
+You only need:
+
+- Git, to clone the repository.
+- Python 3.8 or newer, to run the local static server.
+- A modern browser, such as Chrome, Firefox, Safari, or Edge.
+
+### 1. Clone
 
 ```bash
-python3 -m http.server 8000 --bind 127.0.0.1
+git clone https://github.com/ahruslan17/open-algolab.git
+cd open-algolab
 ```
 
-Open the local visualizer:
+If you downloaded the project as a ZIP archive, unzip it and open a terminal in the extracted `open-algolab` folder instead.
+
+### 2. Check Python
+
+Linux / macOS:
+
+```bash
+python3 --version
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 --version
+```
+
+If Python is missing, install Python 3 from [python.org](https://www.python.org/downloads/). On Windows, enable the installer option that adds Python to `PATH`, or use the `py -3` launcher shown above.
+
+### 3. Run Locally
+
+Linux / macOS:
+
+```bash
+python3 scripts/serve.py
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 scripts/serve.py
+```
+
+Windows Command Prompt:
+
+```bat
+py -3 scripts\serve.py
+```
+
+Then open:
 
 ```text
 http://127.0.0.1:8000/visualizer/
 ```
 
-The visualizer runs fully in the browser.
+Stop the server with `Ctrl+C`.
+
+### Optional Run Settings
+
+Use another port if `8000` is busy:
+
+```bash
+python3 scripts/serve.py --port 8080
+```
+
+On Windows:
+
+```powershell
+py -3 scripts/serve.py --port 8080
+```
+
+Serve on a different host/interface only when you know why you need it:
+
+```bash
+python3 scripts/serve.py --host 127.0.0.1 --port 8000
+```
+
+The server serves the repository root and the visualizer lives at `/visualizer/`.
+
+### Manual Fallback
+
+If you do not want to use `scripts/serve.py`, run Python's built-in static server from the repository root:
+
+```bash
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+Windows PowerShell fallback:
+
+```powershell
+py -3 -m http.server 8000 --bind 127.0.0.1
+```
 
 ## What A Module Contains
 
@@ -134,6 +217,7 @@ open-algolab/
     sliding-window/
     two-pointers/
   visualizer/            # Dependency-free browser visualizer
+  scripts/               # Local development helpers
   .github/FUNDING.yml
   LICENSE
   README.md
