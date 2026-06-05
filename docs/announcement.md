@@ -17,6 +17,8 @@ Current early MVP includes:
 
 It is early, but already usable locally and on GitHub Pages. Feedback and contributions are welcome:
 
+Useful for self-study, interview practice, and explaining algorithm patterns visually.
+
 https://github.com/ahruslan17/open-algolab
 
 ## Russian
@@ -33,6 +35,8 @@ https://github.com/ahruslan17/open-algolab
 - статический запуск без backend и сборки
 
 Проект ранний, но уже можно пользоваться и давать фидбек:
+
+Подходит для самостоятельного обучения, подготовки к интервью и наглядного объяснения алгоритмических паттернов.
 
 https://github.com/ahruslan17/open-algolab
 
